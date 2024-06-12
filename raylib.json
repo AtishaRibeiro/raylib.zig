@@ -9,19 +9,19 @@
     {
       "name": "RAYLIB_VERSION_MAJOR",
       "type": "INT",
-      "value": "5",
+      "value": 5,
       "description": ""
     },
     {
       "name": "RAYLIB_VERSION_MINOR",
       "type": "INT",
-      "value": "1",
+      "value": 1,
       "description": ""
     },
     {
       "name": "RAYLIB_VERSION_PATCH",
       "type": "INT",
-      "value": "0",
+      "value": 0,
       "description": ""
     },
     {
@@ -45,7 +45,7 @@
     {
       "name": "PI",
       "type": "FLOAT",
-      "value": "3.14159265358979323846",
+      "value": 3.14159265358979323846,
       "description": ""
     },
     {
@@ -335,6 +335,12 @@
       "type": "UNKNOWN",
       "value": "SHADER_LOC_MAP_METALNESS",
       "description": ""
+    },
+    {
+      "name": "GetMouseRay",
+      "type": "UNKNOWN",
+      "value": "GetScreenToWorldRay",
+      "description": "Compatibility hack for previous raylib versions"
     }
   ],
   "structs": [
@@ -2069,7 +2075,7 @@
         },
         {
           "name": "KEY_MENU",
-          "value": 82,
+          "value": 5,
           "description": "Key: Android menu button"
         },
         {
@@ -2223,7 +2229,7 @@
         {
           "name": "GAMEPAD_BUTTON_RIGHT_FACE_RIGHT",
           "value": 6,
-          "description": "Gamepad right button right (i.e. PS3: Square, Xbox: X)"
+          "description": "Gamepad right button right (i.e. PS3: Circle, Xbox: B)"
         },
         {
           "name": "GAMEPAD_BUTTON_RIGHT_FACE_DOWN",
@@ -2233,7 +2239,7 @@
         {
           "name": "GAMEPAD_BUTTON_RIGHT_FACE_LEFT",
           "value": 8,
-          "description": "Gamepad right button left (i.e. PS3: Circle, Xbox: B)"
+          "description": "Gamepad right button left (i.e. PS3: Square, Xbox: X)"
         },
         {
           "name": "GAMEPAD_BUTTON_LEFT_TRIGGER_1",
@@ -2248,7 +2254,7 @@
         {
           "name": "GAMEPAD_BUTTON_RIGHT_TRIGGER_1",
           "value": 11,
-          "description": "Gamepad top/back trigger right (one), it could be a trailing button"
+          "description": "Gamepad top/back trigger right (first), it could be a trailing button"
         },
         {
           "name": "GAMEPAD_BUTTON_RIGHT_TRIGGER_2",
@@ -2951,27 +2957,27 @@
         {
           "name": "CAMERA_CUSTOM",
           "value": 0,
-          "description": "Custom camera"
+          "description": "Camera custom, controlled by user (UpdateCamera() does nothing)"
         },
         {
           "name": "CAMERA_FREE",
           "value": 1,
-          "description": "Free camera"
+          "description": "Camera free mode"
         },
         {
           "name": "CAMERA_ORBITAL",
           "value": 2,
-          "description": "Orbital camera"
+          "description": "Camera orbital, around target, zoom supported"
         },
         {
           "name": "CAMERA_FIRST_PERSON",
           "value": 3,
-          "description": "First person camera"
+          "description": "Camera first person"
         },
         {
           "name": "CAMERA_THIRD_PERSON",
           "value": 4,
-          "description": "Third person camera"
+          "description": "Camera third person"
         }
       ]
     },
@@ -3872,13 +3878,13 @@
       ]
     },
     {
-      "name": "GetMouseRay",
-      "description": "Get a ray trace from mouse position",
+      "name": "GetScreenToWorldRay",
+      "description": "Get a ray trace from screen position (i.e mouse)",
       "returnType": "Ray",
       "params": [
         {
           "type": "Vector2",
-          "name": "mousePosition"
+          "name": "position"
         },
         {
           "type": "Camera",
@@ -3887,24 +3893,25 @@
       ]
     },
     {
-      "name": "GetCameraMatrix",
-      "description": "Get camera transform matrix (view matrix)",
-      "returnType": "Matrix",
+      "name": "GetScreenToWorldRayEx",
+      "description": "Get a ray trace from screen position (i.e mouse) in a viewport",
+      "returnType": "Ray",
       "params": [
+        {
+          "type": "Vector2",
+          "name": "position"
+        },
         {
           "type": "Camera",
           "name": "camera"
-        }
-      ]
-    },
-    {
-      "name": "GetCameraMatrix2D",
-      "description": "Get camera 2d transform matrix",
-      "returnType": "Matrix",
-      "params": [
+        },
         {
-          "type": "Camera2D",
-          "name": "camera"
+          "type": "int",
+          "name": "width"
+        },
+        {
+          "type": "int",
+          "name": "height"
         }
       ]
     },
@@ -3919,21 +3926,6 @@
         },
         {
           "type": "Camera",
-          "name": "camera"
-        }
-      ]
-    },
-    {
-      "name": "GetScreenToWorld2D",
-      "description": "Get the world space position for a 2d camera screen space position",
-      "returnType": "Vector2",
-      "params": [
-        {
-          "type": "Vector2",
-          "name": "position"
-        },
-        {
-          "type": "Camera2D",
           "name": "camera"
         }
       ]
@@ -3970,6 +3962,43 @@
           "type": "Vector2",
           "name": "position"
         },
+        {
+          "type": "Camera2D",
+          "name": "camera"
+        }
+      ]
+    },
+    {
+      "name": "GetScreenToWorld2D",
+      "description": "Get the world space position for a 2d camera screen space position",
+      "returnType": "Vector2",
+      "params": [
+        {
+          "type": "Vector2",
+          "name": "position"
+        },
+        {
+          "type": "Camera2D",
+          "name": "camera"
+        }
+      ]
+    },
+    {
+      "name": "GetCameraMatrix",
+      "description": "Get camera transform matrix (view matrix)",
+      "returnType": "Matrix",
+      "params": [
+        {
+          "type": "Camera",
+          "name": "camera"
+        }
+      ]
+    },
+    {
+      "name": "GetCameraMatrix2D",
+      "description": "Get camera 2d transform matrix",
+      "returnType": "Matrix",
+      "params": [
         {
           "type": "Camera2D",
           "name": "camera"
@@ -4471,6 +4500,17 @@
       ]
     },
     {
+      "name": "IsFileNameValid",
+      "description": "Check if fileName is valid for the platform/OS",
+      "returnType": "bool",
+      "params": [
+        {
+          "type": "const char *",
+          "name": "fileName"
+        }
+      ]
+    },
+    {
       "name": "LoadDirectoryFiles",
       "description": "Load directory filepaths",
       "returnType": "FilePathList",
@@ -4896,6 +4936,25 @@
       ]
     },
     {
+      "name": "SetGamepadVibration",
+      "description": "Set gamepad vibration for both motors",
+      "returnType": "void",
+      "params": [
+        {
+          "type": "int",
+          "name": "gamepad"
+        },
+        {
+          "type": "float",
+          "name": "leftMotor"
+        },
+        {
+          "type": "float",
+          "name": "rightMotor"
+        }
+      ]
+    },
+    {
       "name": "IsMouseButtonPressed",
       "description": "Check if a mouse button has been pressed once",
       "returnType": "bool",
@@ -5286,7 +5345,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -5863,6 +5922,29 @@
     },
     {
       "name": "DrawRectangleRoundedLines",
+      "description": "Draw rectangle lines with rounded edges",
+      "returnType": "void",
+      "params": [
+        {
+          "type": "Rectangle",
+          "name": "rec"
+        },
+        {
+          "type": "float",
+          "name": "roundness"
+        },
+        {
+          "type": "int",
+          "name": "segments"
+        },
+        {
+          "type": "Color",
+          "name": "color"
+        }
+      ]
+    },
+    {
+      "name": "DrawRectangleRoundedLinesEx",
       "description": "Draw rectangle with rounded edges outline",
       "returnType": "void",
       "params": [
@@ -5940,7 +6022,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -5959,7 +6041,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6063,7 +6145,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6086,7 +6168,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6109,7 +6191,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6132,7 +6214,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6155,7 +6237,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6562,7 +6644,7 @@
           "name": "point"
         },
         {
-          "type": "Vector2 *",
+          "type": "const Vector2 *",
           "name": "points"
         },
         {
@@ -6618,6 +6700,29 @@
         {
           "type": "int",
           "name": "threshold"
+        }
+      ]
+    },
+    {
+      "name": "CheckCollisionCircleLine",
+      "description": "Check if circle collides with a line created betweeen two points [p1] and [p2]",
+      "returnType": "bool",
+      "params": [
+        {
+          "type": "Vector2",
+          "name": "center"
+        },
+        {
+          "type": "float",
+          "name": "radius"
+        },
+        {
+          "type": "Vector2",
+          "name": "p1"
+        },
+        {
+          "type": "Vector2",
+          "name": "p2"
         }
       ]
     },
@@ -8327,6 +8432,21 @@
       ]
     },
     {
+      "name": "ColorIsEqual",
+      "description": "Check if two colors are equal",
+      "returnType": "bool",
+      "params": [
+        {
+          "type": "Color",
+          "name": "col1"
+        },
+        {
+          "type": "Color",
+          "name": "col2"
+        }
+      ]
+    },
+    {
       "name": "Fade",
       "description": "Get color with alpha applied, alpha goes from 0.0f to 1.0f",
       "returnType": "Color",
@@ -8343,7 +8463,7 @@
     },
     {
       "name": "ColorToInt",
-      "description": "Get hexadecimal value for a Color",
+      "description": "Get hexadecimal value for a Color (0xRRGGBBAA)",
       "returnType": "int",
       "params": [
         {
@@ -9360,6 +9480,28 @@
       ]
     },
     {
+      "name": "TextToSnake",
+      "description": "Get Snake case notation version of provided string",
+      "returnType": "const char *",
+      "params": [
+        {
+          "type": "const char *",
+          "name": "text"
+        }
+      ]
+    },
+    {
+      "name": "TextToCamel",
+      "description": "Get Camel case notation version of provided string",
+      "returnType": "const char *",
+      "params": [
+        {
+          "type": "const char *",
+          "name": "text"
+        }
+      ]
+    },
+    {
       "name": "TextToInteger",
       "description": "Get integer value from text (negative values not supported)",
       "returnType": "int",
@@ -9471,7 +9613,7 @@
       "returnType": "void",
       "params": [
         {
-          "type": "Vector3 *",
+          "type": "const Vector3 *",
           "name": "points"
         },
         {
@@ -11145,7 +11287,7 @@
     },
     {
       "name": "WaveCrop",
-      "description": "Crop a wave to defined samples range",
+      "description": "Crop a wave to defined frames range",
       "returnType": "void",
       "params": [
         {
@@ -11154,11 +11296,11 @@
         },
         {
           "type": "int",
-          "name": "initSample"
+          "name": "initFrame"
         },
         {
           "type": "int",
-          "name": "finalSample"
+          "name": "finalFrame"
         }
       ]
     },
@@ -11606,7 +11748,7 @@
     },
     {
       "name": "AttachAudioStreamProcessor",
-      "description": "Attach audio stream processor to stream, receives the samples as <float>s",
+      "description": "Attach audio stream processor to stream, receives the samples as 'float'",
       "returnType": "void",
       "params": [
         {
@@ -11636,7 +11778,7 @@
     },
     {
       "name": "AttachAudioMixedProcessor",
-      "description": "Attach audio stream processor to the entire audio pipeline, receives the samples as <float>s",
+      "description": "Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'",
       "returnType": "void",
       "params": [
         {

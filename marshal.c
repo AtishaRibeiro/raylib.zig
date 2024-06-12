@@ -413,29 +413,19 @@ void mUnloadShader(Shader *shader)
 	UnloadShader(*shader);
 }
 
-void mGetMouseRay(Ray *out, Vector2 *mousePosition, Camera3D *camera)
+void mGetScreenToWorldRay(Ray *out, Vector2 *position, Camera3D *camera)
 {
-	*out = GetMouseRay(*mousePosition, *camera);
+	*out = GetScreenToWorldRay(*position, *camera);
 }
 
-void mGetCameraMatrix(Matrix *out, Camera3D *camera)
+void mGetScreenToWorldRayEx(Ray *out, Vector2 *position, Camera3D *camera, int width, int height)
 {
-	*out = GetCameraMatrix(*camera);
-}
-
-void mGetCameraMatrix2D(Matrix *out, Camera2D *camera)
-{
-	*out = GetCameraMatrix2D(*camera);
+	*out = GetScreenToWorldRayEx(*position, *camera, width, height);
 }
 
 void mGetWorldToScreen(Vector2 *out, Vector3 *position, Camera3D *camera)
 {
 	*out = GetWorldToScreen(*position, *camera);
-}
-
-void mGetScreenToWorld2D(Vector2 *out, Vector2 *position, Camera2D *camera)
-{
-	*out = GetScreenToWorld2D(*position, *camera);
 }
 
 void mGetWorldToScreenEx(Vector2 *out, Vector3 *position, Camera3D *camera, int width, int height)
@@ -446,6 +436,21 @@ void mGetWorldToScreenEx(Vector2 *out, Vector3 *position, Camera3D *camera, int 
 void mGetWorldToScreen2D(Vector2 *out, Vector2 *position, Camera2D *camera)
 {
 	*out = GetWorldToScreen2D(*position, *camera);
+}
+
+void mGetScreenToWorld2D(Vector2 *out, Vector2 *position, Camera2D *camera)
+{
+	*out = GetScreenToWorld2D(*position, *camera);
+}
+
+void mGetCameraMatrix(Matrix *out, Camera3D *camera)
+{
+	*out = GetCameraMatrix(*camera);
+}
+
+void mGetCameraMatrix2D(Matrix *out, Camera2D *camera)
+{
+	*out = GetCameraMatrix2D(*camera);
 }
 
 void mSetTargetFPS(int fps)
@@ -628,6 +633,11 @@ bool mIsPathFile(const char * path)
 	return IsPathFile(path);
 }
 
+bool mIsFileNameValid(const char * fileName)
+{
+	return IsFileNameValid(fileName);
+}
+
 void mLoadDirectoryFiles(FilePathList *out, const char * dirPath)
 {
 	*out = LoadDirectoryFiles(dirPath);
@@ -806,6 +816,11 @@ float mGetGamepadAxisMovement(int gamepad, int axis)
 int mSetGamepadMappings(const char * mappings)
 {
 	return SetGamepadMappings(mappings);
+}
+
+void mSetGamepadVibration(int gamepad, float leftMotor, float rightMotor)
+{
+	SetGamepadVibration(gamepad, leftMotor, rightMotor);
 }
 
 bool mIsMouseButtonPressed(int button)
@@ -993,7 +1008,7 @@ void mDrawLineEx(Vector2 *startPos, Vector2 *endPos, float thick, Color *color)
 	DrawLineEx(*startPos, *endPos, thick, *color);
 }
 
-void mDrawLineStrip(Vector2 * points, int pointCount, Color *color)
+void mDrawLineStrip(const Vector2 * points, int pointCount, Color *color)
 {
 	DrawLineStrip(points, pointCount, *color);
 }
@@ -1108,9 +1123,14 @@ void mDrawRectangleRounded(Rectangle *rec, float roundness, int segments, Color 
 	DrawRectangleRounded(*rec, roundness, segments, *color);
 }
 
-void mDrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, float lineThick, Color *color)
+void mDrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, Color *color)
 {
-	DrawRectangleRoundedLines(*rec, roundness, segments, lineThick, *color);
+	DrawRectangleRoundedLines(*rec, roundness, segments, *color);
+}
+
+void mDrawRectangleRoundedLinesEx(Rectangle *rec, float roundness, int segments, float lineThick, Color *color)
+{
+	DrawRectangleRoundedLinesEx(*rec, roundness, segments, lineThick, *color);
 }
 
 void mDrawTriangle(Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color)
@@ -1123,12 +1143,12 @@ void mDrawTriangleLines(Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color)
 	DrawTriangleLines(*v1, *v2, *v3, *color);
 }
 
-void mDrawTriangleFan(Vector2 * points, int pointCount, Color *color)
+void mDrawTriangleFan(const Vector2 * points, int pointCount, Color *color)
 {
 	DrawTriangleFan(points, pointCount, *color);
 }
 
-void mDrawTriangleStrip(Vector2 * points, int pointCount, Color *color)
+void mDrawTriangleStrip(const Vector2 * points, int pointCount, Color *color)
 {
 	DrawTriangleStrip(points, pointCount, *color);
 }
@@ -1148,27 +1168,27 @@ void mDrawPolyLinesEx(Vector2 *center, int sides, float radius, float rotation, 
 	DrawPolyLinesEx(*center, sides, radius, rotation, lineThick, *color);
 }
 
-void mDrawSplineLinear(Vector2 * points, int pointCount, float thick, Color *color)
+void mDrawSplineLinear(const Vector2 * points, int pointCount, float thick, Color *color)
 {
 	DrawSplineLinear(points, pointCount, thick, *color);
 }
 
-void mDrawSplineBasis(Vector2 * points, int pointCount, float thick, Color *color)
+void mDrawSplineBasis(const Vector2 * points, int pointCount, float thick, Color *color)
 {
 	DrawSplineBasis(points, pointCount, thick, *color);
 }
 
-void mDrawSplineCatmullRom(Vector2 * points, int pointCount, float thick, Color *color)
+void mDrawSplineCatmullRom(const Vector2 * points, int pointCount, float thick, Color *color)
 {
 	DrawSplineCatmullRom(points, pointCount, thick, *color);
 }
 
-void mDrawSplineBezierQuadratic(Vector2 * points, int pointCount, float thick, Color *color)
+void mDrawSplineBezierQuadratic(const Vector2 * points, int pointCount, float thick, Color *color)
 {
 	DrawSplineBezierQuadratic(points, pointCount, thick, *color);
 }
 
-void mDrawSplineBezierCubic(Vector2 * points, int pointCount, float thick, Color *color)
+void mDrawSplineBezierCubic(const Vector2 * points, int pointCount, float thick, Color *color)
 {
 	DrawSplineBezierCubic(points, pointCount, thick, *color);
 }
@@ -1253,7 +1273,7 @@ bool mCheckCollisionPointTriangle(Vector2 *point, Vector2 *p1, Vector2 *p2, Vect
 	return CheckCollisionPointTriangle(*point, *p1, *p2, *p3);
 }
 
-bool mCheckCollisionPointPoly(Vector2 *point, Vector2 * points, int pointCount)
+bool mCheckCollisionPointPoly(Vector2 *point, const Vector2 * points, int pointCount)
 {
 	return CheckCollisionPointPoly(*point, points, pointCount);
 }
@@ -1266,6 +1286,11 @@ bool mCheckCollisionLines(Vector2 *startPos1, Vector2 *endPos1, Vector2 *startPo
 bool mCheckCollisionPointLine(Vector2 *point, Vector2 *p1, Vector2 *p2, int threshold)
 {
 	return CheckCollisionPointLine(*point, *p1, *p2, threshold);
+}
+
+bool mCheckCollisionCircleLine(Vector2 *center, float radius, Vector2 *p1, Vector2 *p2)
+{
+	return CheckCollisionCircleLine(*center, radius, *p1, *p2);
 }
 
 void mGetCollisionRec(Rectangle *out, Rectangle *rec1, Rectangle *rec2)
@@ -1733,6 +1758,11 @@ void mDrawTextureNPatch(Texture2D *texture, NPatchInfo *nPatchInfo, Rectangle *d
 	DrawTextureNPatch(*texture, *nPatchInfo, *dest, *origin, rotation, *tint);
 }
 
+bool mColorIsEqual(Color *col1, Color *col2)
+{
+	return ColorIsEqual(*col1, *col2);
+}
+
 void mFade(Color *out, Color *color, float alpha)
 {
 	*out = Fade(*color, alpha);
@@ -2013,6 +2043,16 @@ const char * mTextToPascal(const char * text)
 	return TextToPascal(text);
 }
 
+const char * mTextToSnake(const char * text)
+{
+	return TextToSnake(text);
+}
+
+const char * mTextToCamel(const char * text)
+{
+	return TextToCamel(text);
+}
+
 int mTextToInteger(const char * text)
 {
 	return TextToInteger(text);
@@ -2043,7 +2083,7 @@ void mDrawTriangle3D(Vector3 *v1, Vector3 *v2, Vector3 *v3, Color *color)
 	DrawTriangle3D(*v1, *v2, *v3, *color);
 }
 
-void mDrawTriangleStrip3D(Vector3 * points, int pointCount, Color *color)
+void mDrawTriangleStrip3D(const Vector3 * points, int pointCount, Color *color)
 {
 	DrawTriangleStrip3D(points, pointCount, *color);
 }
@@ -2523,9 +2563,9 @@ void mWaveCopy(Wave *out, Wave *wave)
 	*out = WaveCopy(*wave);
 }
 
-void mWaveCrop(Wave * wave, int initSample, int finalSample)
+void mWaveCrop(Wave * wave, int initFrame, int finalFrame)
 {
-	WaveCrop(wave, initSample, finalSample);
+	WaveCrop(wave, initFrame, finalFrame);
 }
 
 void mWaveFormat(Wave * wave, int sampleRate, int sampleSize, int channels)
@@ -2773,6 +2813,21 @@ void mrlViewport(int x, int y, int width, int height)
 	rlViewport(x, y, width, height);
 }
 
+void mrlSetClipPlanes(double nearPlane, double farPlane)
+{
+	rlSetClipPlanes(nearPlane, farPlane);
+}
+
+double mrlGetCullDistanceNear(void)
+{
+	return rlGetCullDistanceNear();
+}
+
+double mrlGetCullDistanceFar(void)
+{
+	return rlGetCullDistanceFar();
+}
+
 void mrlBegin(int mode)
 {
 	rlBegin(mode);
@@ -2916,6 +2971,11 @@ void mrlEnableFramebuffer(unsigned int id)
 void mrlDisableFramebuffer(void)
 {
 	rlDisableFramebuffer();
+}
+
+unsigned int mrlGetActiveFramebuffer(void)
+{
+	return rlGetActiveFramebuffer();
 }
 
 void mrlActiveDrawBuffers(int count)
@@ -3203,9 +3263,9 @@ void mrlUnloadVertexBuffer(unsigned int vboId)
 	rlUnloadVertexBuffer(vboId);
 }
 
-void mrlSetVertexAttribute(unsigned int index, int compSize, int type, bool normalized, int stride, const void * pointer)
+void mrlSetVertexAttribute(unsigned int index, int compSize, int type, bool normalized, int stride, int offset)
 {
-	rlSetVertexAttribute(index, compSize, type, normalized, stride, pointer);
+	rlSetVertexAttribute(index, compSize, type, normalized, stride, offset);
 }
 
 void mrlSetVertexAttributeDivisor(unsigned int index, int divisor)
@@ -3288,9 +3348,9 @@ unsigned char * mrlReadScreenPixels(int width, int height)
 	return rlReadScreenPixels(width, height);
 }
 
-unsigned int mrlLoadFramebuffer(int width, int height)
+unsigned int mrlLoadFramebuffer(void)
 {
-	return rlLoadFramebuffer(width, height);
+	return rlLoadFramebuffer();
 }
 
 void mrlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType, int texType, int mipLevel)
@@ -3598,6 +3658,16 @@ void mVector2Reflect(Vector2 *out, Vector2 *v, Vector2 *normal)
 	*out = Vector2Reflect(*v, *normal);
 }
 
+void mVector2Min(Vector2 *out, Vector2 *v1, Vector2 *v2)
+{
+	*out = Vector2Min(*v1, *v2);
+}
+
+void mVector2Max(Vector2 *out, Vector2 *v1, Vector2 *v2)
+{
+	*out = Vector2Max(*v1, *v2);
+}
+
 void mVector2Rotate(Vector2 *out, Vector2 *v, float angle)
 {
 	*out = Vector2Rotate(*v, angle);
@@ -3626,6 +3696,11 @@ void mVector2ClampValue(Vector2 *out, Vector2 *v, float min, float max)
 int mVector2Equals(Vector2 *p, Vector2 *q)
 {
 	return Vector2Equals(*p, *q);
+}
+
+void mVector2Refract(Vector2 *out, Vector2 *v, Vector2 *n, float r)
+{
+	*out = Vector2Refract(*v, *n, r);
 }
 
 void mVector3Zero(Vector3 *out)
@@ -3753,9 +3828,19 @@ void mVector3RotateByAxisAngle(Vector3 *out, Vector3 *v, Vector3 *axis, float an
 	*out = Vector3RotateByAxisAngle(*v, *axis, angle);
 }
 
+void mVector3MoveTowards(Vector3 *out, Vector3 *v, Vector3 *target, float maxDistance)
+{
+	*out = Vector3MoveTowards(*v, *target, maxDistance);
+}
+
 void mVector3Lerp(Vector3 *out, Vector3 *v1, Vector3 *v2, float amount)
 {
 	*out = Vector3Lerp(*v1, *v2, amount);
+}
+
+void mVector3CubicHermite(Vector3 *out, Vector3 *v1, Vector3 *tangent1, Vector3 *v2, Vector3 *tangent2, float amount)
+{
+	*out = Vector3CubicHermite(*v1, *tangent1, *v2, *tangent2, amount);
 }
 
 void mVector3Reflect(Vector3 *out, Vector3 *v, Vector3 *normal)
@@ -3811,6 +3896,116 @@ int mVector3Equals(Vector3 *p, Vector3 *q)
 void mVector3Refract(Vector3 *out, Vector3 *v, Vector3 *n, float r)
 {
 	*out = Vector3Refract(*v, *n, r);
+}
+
+void mVector4Zero(Vector4 *out)
+{
+	*out = Vector4Zero();
+}
+
+void mVector4One(Vector4 *out)
+{
+	*out = Vector4One();
+}
+
+void mVector4Add(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Add(*v1, *v2);
+}
+
+void mVector4AddValue(Vector4 *out, Vector4 *v, float add)
+{
+	*out = Vector4AddValue(*v, add);
+}
+
+void mVector4Subtract(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Subtract(*v1, *v2);
+}
+
+void mVector4SubtractValue(Vector4 *out, Vector4 *v, float add)
+{
+	*out = Vector4SubtractValue(*v, add);
+}
+
+float mVector4Length(Vector4 *v)
+{
+	return Vector4Length(*v);
+}
+
+float mVector4LengthSqr(Vector4 *v)
+{
+	return Vector4LengthSqr(*v);
+}
+
+float mVector4DotProduct(Vector4 *v1, Vector4 *v2)
+{
+	return Vector4DotProduct(*v1, *v2);
+}
+
+float mVector4Distance(Vector4 *v1, Vector4 *v2)
+{
+	return Vector4Distance(*v1, *v2);
+}
+
+float mVector4DistanceSqr(Vector4 *v1, Vector4 *v2)
+{
+	return Vector4DistanceSqr(*v1, *v2);
+}
+
+void mVector4Scale(Vector4 *out, Vector4 *v, float scale)
+{
+	*out = Vector4Scale(*v, scale);
+}
+
+void mVector4Multiply(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Multiply(*v1, *v2);
+}
+
+void mVector4Negate(Vector4 *out, Vector4 *v)
+{
+	*out = Vector4Negate(*v);
+}
+
+void mVector4Divide(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Divide(*v1, *v2);
+}
+
+void mVector4Normalize(Vector4 *out, Vector4 *v)
+{
+	*out = Vector4Normalize(*v);
+}
+
+void mVector4Min(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Min(*v1, *v2);
+}
+
+void mVector4Max(Vector4 *out, Vector4 *v1, Vector4 *v2)
+{
+	*out = Vector4Max(*v1, *v2);
+}
+
+void mVector4Lerp(Vector4 *out, Vector4 *v1, Vector4 *v2, float amount)
+{
+	*out = Vector4Lerp(*v1, *v2, amount);
+}
+
+void mVector4MoveTowards(Vector4 *out, Vector4 *v, Vector4 *target, float maxDistance)
+{
+	*out = Vector4MoveTowards(*v, *target, maxDistance);
+}
+
+void mVector4Invert(Vector4 *out, Vector4 *v)
+{
+	*out = Vector4Invert(*v);
+}
+
+int mVector4Equals(Vector4 *p, Vector4 *q)
+{
+	return Vector4Equals(*p, *q);
 }
 
 float mMatrixDeterminant(Matrix *mat)
@@ -3893,9 +4088,9 @@ void mMatrixScale(Matrix *out, float x, float y, float z)
 	*out = MatrixScale(x, y, z);
 }
 
-void mMatrixFrustum(Matrix *out, double left, double right, double bottom, double top, double near, double far)
+void mMatrixFrustum(Matrix *out, double left, double right, double bottom, double top, double nearPlane, double farPlane)
 {
-	*out = MatrixFrustum(left, right, bottom, top, near, far);
+	*out = MatrixFrustum(left, right, bottom, top, nearPlane, farPlane);
 }
 
 void mMatrixPerspective(Matrix *out, double fovY, double aspect, double nearPlane, double farPlane)
@@ -3986,6 +4181,11 @@ void mQuaternionNlerp(Vector4 *out, Vector4 *q1, Vector4 *q2, float amount)
 void mQuaternionSlerp(Vector4 *out, Vector4 *q1, Vector4 *q2, float amount)
 {
 	*out = QuaternionSlerp(*q1, *q2, amount);
+}
+
+void mQuaternionCubicHermiteSpline(Vector4 *out, Vector4 *q1, Vector4 *outTangent1, Vector4 *q2, Vector4 *inTangent2, float t)
+{
+	*out = QuaternionCubicHermiteSpline(*q1, *outTangent1, *q2, *inTangent2, t);
 }
 
 void mQuaternionFromVector3ToVector3(Vector4 *out, Vector3 *from, Vector3 *to)

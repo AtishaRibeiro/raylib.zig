@@ -37,6 +37,23 @@ git submodule update --init --recursive
 
 The bindings have been prebuilt so you just need to add raylib as module
 
+build.zig.zon:
+```zig
+.{
+    .dependencies = .{
+        .raylib = .{
+            // Path to the raylib submodule inside of this repo
+            .path = "path/to/raylib/raylib",
+        },
+        // Only needed when using raygui
+        .raygui = .{
+            .path = "path/to/raygui",
+        },
+    },
+}
+
+```
+
 build.zig:
 ```zig
 const raylib = @import("path/to/raylib.zig/build.zig");

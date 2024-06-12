@@ -255,26 +255,29 @@ void mSetShaderValueTexture(Shader *shader, int locIndex, Texture2D *texture);
 // Unload shader from GPU memory (VRAM)
 void mUnloadShader(Shader *shader);
 
-// Get a ray trace from mouse position
-void mGetMouseRay(Ray *out, Vector2 *mousePosition, Camera3D *camera);
+// Get a ray trace from screen position (i.e mouse)
+void mGetScreenToWorldRay(Ray *out, Vector2 *position, Camera3D *camera);
 
-// Get camera transform matrix (view matrix)
-void mGetCameraMatrix(Matrix *out, Camera3D *camera);
-
-// Get camera 2d transform matrix
-void mGetCameraMatrix2D(Matrix *out, Camera2D *camera);
+// Get a ray trace from screen position (i.e mouse) in a viewport
+void mGetScreenToWorldRayEx(Ray *out, Vector2 *position, Camera3D *camera, int width, int height);
 
 // Get the screen space position for a 3d world space position
 void mGetWorldToScreen(Vector2 *out, Vector3 *position, Camera3D *camera);
-
-// Get the world space position for a 2d camera screen space position
-void mGetScreenToWorld2D(Vector2 *out, Vector2 *position, Camera2D *camera);
 
 // Get size position for a 3d world space position
 void mGetWorldToScreenEx(Vector2 *out, Vector3 *position, Camera3D *camera, int width, int height);
 
 // Get the screen space position for a 2d camera world space position
 void mGetWorldToScreen2D(Vector2 *out, Vector2 *position, Camera2D *camera);
+
+// Get the world space position for a 2d camera screen space position
+void mGetScreenToWorld2D(Vector2 *out, Vector2 *position, Camera2D *camera);
+
+// Get camera transform matrix (view matrix)
+void mGetCameraMatrix(Matrix *out, Camera3D *camera);
+
+// Get camera 2d transform matrix
+void mGetCameraMatrix2D(Matrix *out, Camera2D *camera);
 
 // Set target FPS (maximum)
 void mSetTargetFPS(int fps);
@@ -384,6 +387,9 @@ bool mChangeDirectory(const char * dir);
 // Check if a given path is a file or a directory
 bool mIsPathFile(const char * path);
 
+// Check if fileName is valid for the platform/OS
+bool mIsFileNameValid(const char * fileName);
+
 // Load directory filepaths
 void mLoadDirectoryFiles(FilePathList *out, const char * dirPath);
 
@@ -491,6 +497,9 @@ float mGetGamepadAxisMovement(int gamepad, int axis);
 
 // Set internal gamepad mappings (SDL_GameControllerDB)
 int mSetGamepadMappings(const char * mappings);
+
+// Set gamepad vibration for both motors
+void mSetGamepadVibration(int gamepad, float leftMotor, float rightMotor);
 
 // Check if a mouse button has been pressed once
 bool mIsMouseButtonPressed(int button);
@@ -604,7 +613,7 @@ void mDrawLineV(Vector2 *startPos, Vector2 *endPos, Color *color);
 void mDrawLineEx(Vector2 *startPos, Vector2 *endPos, float thick, Color *color);
 
 // Draw lines sequence (using gl lines)
-void mDrawLineStrip(Vector2 * points, int pointCount, Color *color);
+void mDrawLineStrip(const Vector2 * points, int pointCount, Color *color);
 
 // Draw line segment cubic-bezier in-out interpolation
 void mDrawLineBezier(Vector2 *startPos, Vector2 *endPos, float thick, Color *color);
@@ -672,8 +681,11 @@ void mDrawRectangleLinesEx(Rectangle *rec, float lineThick, Color *color);
 // Draw rectangle with rounded edges
 void mDrawRectangleRounded(Rectangle *rec, float roundness, int segments, Color *color);
 
+// Draw rectangle lines with rounded edges
+void mDrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, Color *color);
+
 // Draw rectangle with rounded edges outline
-void mDrawRectangleRoundedLines(Rectangle *rec, float roundness, int segments, float lineThick, Color *color);
+void mDrawRectangleRoundedLinesEx(Rectangle *rec, float roundness, int segments, float lineThick, Color *color);
 
 // Draw a color-filled triangle (vertex in counter-clockwise order!)
 void mDrawTriangle(Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color);
@@ -682,10 +694,10 @@ void mDrawTriangle(Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color);
 void mDrawTriangleLines(Vector2 *v1, Vector2 *v2, Vector2 *v3, Color *color);
 
 // Draw a triangle fan defined by points (first vertex is the center)
-void mDrawTriangleFan(Vector2 * points, int pointCount, Color *color);
+void mDrawTriangleFan(const Vector2 * points, int pointCount, Color *color);
 
 // Draw a triangle strip defined by points
-void mDrawTriangleStrip(Vector2 * points, int pointCount, Color *color);
+void mDrawTriangleStrip(const Vector2 * points, int pointCount, Color *color);
 
 // Draw a regular polygon (Vector version)
 void mDrawPoly(Vector2 *center, int sides, float radius, float rotation, Color *color);
@@ -697,19 +709,19 @@ void mDrawPolyLines(Vector2 *center, int sides, float radius, float rotation, Co
 void mDrawPolyLinesEx(Vector2 *center, int sides, float radius, float rotation, float lineThick, Color *color);
 
 // Draw spline: Linear, minimum 2 points
-void mDrawSplineLinear(Vector2 * points, int pointCount, float thick, Color *color);
+void mDrawSplineLinear(const Vector2 * points, int pointCount, float thick, Color *color);
 
 // Draw spline: B-Spline, minimum 4 points
-void mDrawSplineBasis(Vector2 * points, int pointCount, float thick, Color *color);
+void mDrawSplineBasis(const Vector2 * points, int pointCount, float thick, Color *color);
 
 // Draw spline: Catmull-Rom, minimum 4 points
-void mDrawSplineCatmullRom(Vector2 * points, int pointCount, float thick, Color *color);
+void mDrawSplineCatmullRom(const Vector2 * points, int pointCount, float thick, Color *color);
 
 // Draw spline: Quadratic Bezier, minimum 3 points (1 control point): [p1, c2, p3, c4...]
-void mDrawSplineBezierQuadratic(Vector2 * points, int pointCount, float thick, Color *color);
+void mDrawSplineBezierQuadratic(const Vector2 * points, int pointCount, float thick, Color *color);
 
 // Draw spline: Cubic Bezier, minimum 4 points (2 control points): [p1, c2, c3, p4, c5, c6...]
-void mDrawSplineBezierCubic(Vector2 * points, int pointCount, float thick, Color *color);
+void mDrawSplineBezierCubic(const Vector2 * points, int pointCount, float thick, Color *color);
 
 // Draw spline segment: Linear, 2 points
 void mDrawSplineSegmentLinear(Vector2 *p1, Vector2 *p2, float thick, Color *color);
@@ -760,13 +772,16 @@ bool mCheckCollisionPointCircle(Vector2 *point, Vector2 *center, float radius);
 bool mCheckCollisionPointTriangle(Vector2 *point, Vector2 *p1, Vector2 *p2, Vector2 *p3);
 
 // Check if point is within a polygon described by array of vertices
-bool mCheckCollisionPointPoly(Vector2 *point, Vector2 * points, int pointCount);
+bool mCheckCollisionPointPoly(Vector2 *point, const Vector2 * points, int pointCount);
 
 // Check the collision between two lines defined by two points each, returns collision point by reference
 bool mCheckCollisionLines(Vector2 *startPos1, Vector2 *endPos1, Vector2 *startPos2, Vector2 *endPos2, Vector2 * collisionPoint);
 
 // Check if point belongs to line created between two points [p1] and [p2] with defined margin in pixels [threshold]
 bool mCheckCollisionPointLine(Vector2 *point, Vector2 *p1, Vector2 *p2, int threshold);
+
+// Check if circle collides with a line created betweeen two points [p1] and [p2]
+bool mCheckCollisionCircleLine(Vector2 *center, float radius, Vector2 *p1, Vector2 *p2);
 
 // Get collision rectangle for two rectangles collision
 void mGetCollisionRec(Rectangle *out, Rectangle *rec1, Rectangle *rec2);
@@ -1047,10 +1062,13 @@ void mDrawTexturePro(Texture2D *texture, Rectangle *source, Rectangle *dest, Vec
 // Draws a texture (or part of it) that stretches or shrinks nicely
 void mDrawTextureNPatch(Texture2D *texture, NPatchInfo *nPatchInfo, Rectangle *dest, Vector2 *origin, float rotation, Color *tint);
 
+// Check if two colors are equal
+bool mColorIsEqual(Color *col1, Color *col2);
+
 // Get color with alpha applied, alpha goes from 0.0f to 1.0f
 void mFade(Color *out, Color *color, float alpha);
 
-// Get hexadecimal value for a Color
+// Get hexadecimal value for a Color (0xRRGGBBAA)
 int mColorToInt(Color *color);
 
 // Get Color normalized as float [0..1]
@@ -1215,6 +1233,12 @@ const char * mTextToLower(const char * text);
 // Get Pascal case notation version of provided string
 const char * mTextToPascal(const char * text);
 
+// Get Snake case notation version of provided string
+const char * mTextToSnake(const char * text);
+
+// Get Camel case notation version of provided string
+const char * mTextToCamel(const char * text);
+
 // Get integer value from text (negative values not supported)
 int mTextToInteger(const char * text);
 
@@ -1234,7 +1258,7 @@ void mDrawCircle3D(Vector3 *center, float radius, Vector3 *rotationAxis, float r
 void mDrawTriangle3D(Vector3 *v1, Vector3 *v2, Vector3 *v3, Color *color);
 
 // Draw a triangle strip defined by points
-void mDrawTriangleStrip3D(Vector3 * points, int pointCount, Color *color);
+void mDrawTriangleStrip3D(const Vector3 * points, int pointCount, Color *color);
 
 // Draw cube
 void mDrawCube(Vector3 *position, float width, float height, float length, Color *color);
@@ -1521,8 +1545,8 @@ void mSetSoundPan(Sound *sound, float pan);
 // Copy a wave to a new wave
 void mWaveCopy(Wave *out, Wave *wave);
 
-// Crop a wave to defined samples range
-void mWaveCrop(Wave * wave, int initSample, int finalSample);
+// Crop a wave to defined frames range
+void mWaveCrop(Wave * wave, int initFrame, int finalFrame);
 
 // Convert wave data to desired format
 void mWaveFormat(Wave * wave, int sampleRate, int sampleSize, int channels);
@@ -1626,13 +1650,13 @@ void mSetAudioStreamBufferSizeDefault(int size);
 // Audio thread callback to request new data
 void mSetAudioStreamCallback(AudioStream *stream, AudioCallback callback);
 
-// Attach audio stream processor to stream, receives the samples as <float>s
+// Attach audio stream processor to stream, receives the samples as 'float'
 void mAttachAudioStreamProcessor(AudioStream *stream, AudioCallback processor);
 
 // Detach audio stream processor from stream
 void mDetachAudioStreamProcessor(AudioStream *stream, AudioCallback processor);
 
-// Attach audio stream processor to the entire audio pipeline, receives the samples as <float>s
+// Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'
 void mAttachAudioMixedProcessor(AudioCallback processor);
 
 // Detach audio stream processor from the entire audio pipeline
@@ -1670,6 +1694,15 @@ void mrlOrtho(double left, double right, double bottom, double top, double znear
 
 // Set the viewport area
 void mrlViewport(int x, int y, int width, int height);
+
+// Set clip planes distances
+void mrlSetClipPlanes(double nearPlane, double farPlane);
+
+// Get cull plane distance near
+double mrlGetCullDistanceNear(void);
+
+// Get cull plane distance far
+double mrlGetCullDistanceFar(void);
 
 // Initialize drawing mode (how to organize vertex)
 void mrlBegin(int mode);
@@ -1758,13 +1791,16 @@ void mrlEnableFramebuffer(unsigned int id);
 // Disable render texture (fbo), return to default framebuffer
 void mrlDisableFramebuffer(void);
 
+// Get the currently active render texture (fbo), 0 for default framebuffer
+unsigned int mrlGetActiveFramebuffer(void);
+
 // Activate multiple draw color buffers
 void mrlActiveDrawBuffers(int count);
 
 // Blit active framebuffer to main framebuffer
 void mrlBlitFramebuffer(int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight, int bufferMask);
 
-// Bind framebuffer (FBO) 
+// Bind framebuffer (FBO)
 void mrlBindFramebuffer(unsigned int target, unsigned int framebuffer);
 
 // Enable color blending
@@ -1930,7 +1966,7 @@ void mrlUnloadVertexArray(unsigned int vaoId);
 void mrlUnloadVertexBuffer(unsigned int vboId);
 
 // Set vertex attribute data configuration
-void mrlSetVertexAttribute(unsigned int index, int compSize, int type, bool normalized, int stride, const void * pointer);
+void mrlSetVertexAttribute(unsigned int index, int compSize, int type, bool normalized, int stride, int offset);
 
 // Set vertex attribute data divisor
 void mrlSetVertexAttributeDivisor(unsigned int index, int divisor);
@@ -1981,7 +2017,7 @@ void * mrlReadTexturePixels(unsigned int id, int width, int height, int format);
 unsigned char * mrlReadScreenPixels(int width, int height);
 
 // Load an empty framebuffer
-unsigned int mrlLoadFramebuffer(int width, int height);
+unsigned int mrlLoadFramebuffer(void);
 
 // Attach texture/renderbuffer to a framebuffer
 void mrlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType, int texType, int mipLevel);
@@ -2061,10 +2097,10 @@ void mrlGetMatrixProjection(Matrix *out);
 // Get internal accumulated transform matrix
 void mrlGetMatrixTransform(Matrix *out);
 
-// 
+// Get internal projection matrix for stereo render (selected eye)
 void mrlGetMatrixProjectionStereo(Matrix *out, int eye);
 
-// 
+// Get internal view offset matrix for stereo render (selected eye)
 void mrlGetMatrixViewOffsetStereo(Matrix *out, int eye);
 
 // Set a custom projection matrix (replaces internal projection matrix)
@@ -2167,6 +2203,12 @@ void mVector2Lerp(Vector2 *out, Vector2 *v1, Vector2 *v2, float amount);
 void mVector2Reflect(Vector2 *out, Vector2 *v, Vector2 *normal);
 
 // 
+void mVector2Min(Vector2 *out, Vector2 *v1, Vector2 *v2);
+
+// 
+void mVector2Max(Vector2 *out, Vector2 *v1, Vector2 *v2);
+
+// 
 void mVector2Rotate(Vector2 *out, Vector2 *v, float angle);
 
 // 
@@ -2183,6 +2225,9 @@ void mVector2ClampValue(Vector2 *out, Vector2 *v, float min, float max);
 
 // 
 int mVector2Equals(Vector2 *p, Vector2 *q);
+
+// 
+void mVector2Refract(Vector2 *out, Vector2 *v, Vector2 *n, float r);
 
 // 
 void mVector3Zero(Vector3 *out);
@@ -2260,7 +2305,13 @@ void mVector3RotateByQuaternion(Vector3 *out, Vector3 *v, Vector4 *q);
 void mVector3RotateByAxisAngle(Vector3 *out, Vector3 *v, Vector3 *axis, float angle);
 
 // 
+void mVector3MoveTowards(Vector3 *out, Vector3 *v, Vector3 *target, float maxDistance);
+
+// 
 void mVector3Lerp(Vector3 *out, Vector3 *v1, Vector3 *v2, float amount);
+
+// 
+void mVector3CubicHermite(Vector3 *out, Vector3 *v1, Vector3 *tangent1, Vector3 *v2, Vector3 *tangent2, float amount);
 
 // 
 void mVector3Reflect(Vector3 *out, Vector3 *v, Vector3 *normal);
@@ -2294,6 +2345,72 @@ int mVector3Equals(Vector3 *p, Vector3 *q);
 
 // 
 void mVector3Refract(Vector3 *out, Vector3 *v, Vector3 *n, float r);
+
+// 
+void mVector4Zero(Vector4 *out);
+
+// 
+void mVector4One(Vector4 *out);
+
+// 
+void mVector4Add(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4AddValue(Vector4 *out, Vector4 *v, float add);
+
+// 
+void mVector4Subtract(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4SubtractValue(Vector4 *out, Vector4 *v, float add);
+
+// 
+float mVector4Length(Vector4 *v);
+
+// 
+float mVector4LengthSqr(Vector4 *v);
+
+// 
+float mVector4DotProduct(Vector4 *v1, Vector4 *v2);
+
+// 
+float mVector4Distance(Vector4 *v1, Vector4 *v2);
+
+// 
+float mVector4DistanceSqr(Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4Scale(Vector4 *out, Vector4 *v, float scale);
+
+// 
+void mVector4Multiply(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4Negate(Vector4 *out, Vector4 *v);
+
+// 
+void mVector4Divide(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4Normalize(Vector4 *out, Vector4 *v);
+
+// 
+void mVector4Min(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4Max(Vector4 *out, Vector4 *v1, Vector4 *v2);
+
+// 
+void mVector4Lerp(Vector4 *out, Vector4 *v1, Vector4 *v2, float amount);
+
+// 
+void mVector4MoveTowards(Vector4 *out, Vector4 *v, Vector4 *target, float maxDistance);
+
+// 
+void mVector4Invert(Vector4 *out, Vector4 *v);
+
+// 
+int mVector4Equals(Vector4 *p, Vector4 *q);
 
 // 
 float mMatrixDeterminant(Matrix *mat);
@@ -2344,7 +2461,7 @@ void mMatrixRotateZYX(Matrix *out, Vector3 *angle);
 void mMatrixScale(Matrix *out, float x, float y, float z);
 
 // 
-void mMatrixFrustum(Matrix *out, double left, double right, double bottom, double top, double near, double far);
+void mMatrixFrustum(Matrix *out, double left, double right, double bottom, double top, double nearPlane, double farPlane);
 
 // 
 void mMatrixPerspective(Matrix *out, double fovY, double aspect, double nearPlane, double farPlane);
@@ -2399,6 +2516,9 @@ void mQuaternionNlerp(Vector4 *out, Vector4 *q1, Vector4 *q2, float amount);
 
 // 
 void mQuaternionSlerp(Vector4 *out, Vector4 *q1, Vector4 *q2, float amount);
+
+// 
+void mQuaternionCubicHermiteSpline(Vector4 *out, Vector4 *q1, Vector4 *outTangent1, Vector4 *q2, Vector4 *inTangent2, float t);
 
 // 
 void mQuaternionFromVector3ToVector3(Vector4 *out, Vector3 *from, Vector3 *to);

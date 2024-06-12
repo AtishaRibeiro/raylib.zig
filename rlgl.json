@@ -9,7 +9,7 @@
     {
       "name": "RLGL_VERSION",
       "type": "STRING",
-      "value": "4.5",
+      "value": "5.0",
       "description": ""
     },
     {
@@ -75,446 +75,482 @@
     {
       "name": "RL_DEFAULT_BATCH_BUFFER_ELEMENTS",
       "type": "INT",
-      "value": "8192",
+      "value": 8192,
       "description": ""
     },
     {
       "name": "RL_DEFAULT_BATCH_BUFFERS",
       "type": "INT",
-      "value": "1",
+      "value": 1,
       "description": "Default number of batch buffers (multi-buffering)"
     },
     {
       "name": "RL_DEFAULT_BATCH_DRAWCALLS",
       "type": "INT",
-      "value": "256",
+      "value": 256,
       "description": "Default number of batch draw calls (by state changes: mode, texture)"
     },
     {
       "name": "RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS",
       "type": "INT",
-      "value": "4",
+      "value": 4,
       "description": "Maximum number of textures units that can be activated on batch drawing (SetShaderValueTexture())"
     },
     {
       "name": "RL_MAX_MATRIX_STACK_SIZE",
       "type": "INT",
-      "value": "32",
+      "value": 32,
       "description": "Maximum size of Matrix stack"
     },
     {
       "name": "RL_MAX_SHADER_LOCATIONS",
       "type": "INT",
-      "value": "32",
+      "value": 32,
       "description": "Maximum number of shader locations supported"
     },
     {
       "name": "RL_CULL_DISTANCE_NEAR",
       "type": "DOUBLE",
-      "value": "0.01",
+      "value": 0.01,
       "description": "Default near cull distance"
     },
     {
       "name": "RL_CULL_DISTANCE_FAR",
       "type": "DOUBLE",
-      "value": "1000.0",
+      "value": 1000.0,
       "description": "Default far cull distance"
     },
     {
       "name": "RL_TEXTURE_WRAP_S",
       "type": "INT",
-      "value": "10242",
+      "value": 10242,
       "description": "GL_TEXTURE_WRAP_S"
     },
     {
       "name": "RL_TEXTURE_WRAP_T",
       "type": "INT",
-      "value": "10243",
+      "value": 10243,
       "description": "GL_TEXTURE_WRAP_T"
     },
     {
       "name": "RL_TEXTURE_MAG_FILTER",
       "type": "INT",
-      "value": "10240",
+      "value": 10240,
       "description": "GL_TEXTURE_MAG_FILTER"
     },
     {
       "name": "RL_TEXTURE_MIN_FILTER",
       "type": "INT",
-      "value": "10241",
+      "value": 10241,
       "description": "GL_TEXTURE_MIN_FILTER"
     },
     {
       "name": "RL_TEXTURE_FILTER_NEAREST",
       "type": "INT",
-      "value": "9728",
+      "value": 9728,
       "description": "GL_NEAREST"
     },
     {
       "name": "RL_TEXTURE_FILTER_LINEAR",
       "type": "INT",
-      "value": "9729",
+      "value": 9729,
       "description": "GL_LINEAR"
     },
     {
       "name": "RL_TEXTURE_FILTER_MIP_NEAREST",
       "type": "INT",
-      "value": "9984",
+      "value": 9984,
       "description": "GL_NEAREST_MIPMAP_NEAREST"
     },
     {
       "name": "RL_TEXTURE_FILTER_NEAREST_MIP_LINEAR",
       "type": "INT",
-      "value": "9986",
+      "value": 9986,
       "description": "GL_NEAREST_MIPMAP_LINEAR"
     },
     {
       "name": "RL_TEXTURE_FILTER_LINEAR_MIP_NEAREST",
       "type": "INT",
-      "value": "9985",
+      "value": 9985,
       "description": "GL_LINEAR_MIPMAP_NEAREST"
     },
     {
       "name": "RL_TEXTURE_FILTER_MIP_LINEAR",
       "type": "INT",
-      "value": "9987",
+      "value": 9987,
       "description": "GL_LINEAR_MIPMAP_LINEAR"
     },
     {
       "name": "RL_TEXTURE_FILTER_ANISOTROPIC",
       "type": "INT",
-      "value": "12288",
+      "value": 12288,
       "description": "Anisotropic filter (custom identifier)"
     },
     {
       "name": "RL_TEXTURE_MIPMAP_BIAS_RATIO",
       "type": "INT",
-      "value": "16384",
+      "value": 16384,
       "description": "Texture mipmap bias, percentage ratio (custom identifier)"
     },
     {
       "name": "RL_TEXTURE_WRAP_REPEAT",
       "type": "INT",
-      "value": "10497",
+      "value": 10497,
       "description": "GL_REPEAT"
     },
     {
       "name": "RL_TEXTURE_WRAP_CLAMP",
       "type": "INT",
-      "value": "33071",
+      "value": 33071,
       "description": "GL_CLAMP_TO_EDGE"
     },
     {
       "name": "RL_TEXTURE_WRAP_MIRROR_REPEAT",
       "type": "INT",
-      "value": "33648",
+      "value": 33648,
       "description": "GL_MIRRORED_REPEAT"
     },
     {
       "name": "RL_TEXTURE_WRAP_MIRROR_CLAMP",
       "type": "INT",
-      "value": "34626",
+      "value": 34626,
       "description": "GL_MIRROR_CLAMP_EXT"
     },
     {
       "name": "RL_MODELVIEW",
       "type": "INT",
-      "value": "5888",
+      "value": 5888,
       "description": "GL_MODELVIEW"
     },
     {
       "name": "RL_PROJECTION",
       "type": "INT",
-      "value": "5889",
+      "value": 5889,
       "description": "GL_PROJECTION"
     },
     {
       "name": "RL_TEXTURE",
       "type": "INT",
-      "value": "5890",
+      "value": 5890,
       "description": "GL_TEXTURE"
     },
     {
       "name": "RL_LINES",
       "type": "INT",
-      "value": "1",
+      "value": 1,
       "description": "GL_LINES"
     },
     {
       "name": "RL_TRIANGLES",
       "type": "INT",
-      "value": "4",
+      "value": 4,
       "description": "GL_TRIANGLES"
     },
     {
       "name": "RL_QUADS",
       "type": "INT",
-      "value": "7",
+      "value": 7,
       "description": "GL_QUADS"
     },
     {
       "name": "RL_UNSIGNED_BYTE",
       "type": "INT",
-      "value": "5121",
+      "value": 5121,
       "description": "GL_UNSIGNED_BYTE"
     },
     {
       "name": "RL_FLOAT",
       "type": "INT",
-      "value": "5126",
+      "value": 5126,
       "description": "GL_FLOAT"
     },
     {
       "name": "RL_STREAM_DRAW",
       "type": "INT",
-      "value": "35040",
+      "value": 35040,
       "description": "GL_STREAM_DRAW"
     },
     {
       "name": "RL_STREAM_READ",
       "type": "INT",
-      "value": "35041",
+      "value": 35041,
       "description": "GL_STREAM_READ"
     },
     {
       "name": "RL_STREAM_COPY",
       "type": "INT",
-      "value": "35042",
+      "value": 35042,
       "description": "GL_STREAM_COPY"
     },
     {
       "name": "RL_STATIC_DRAW",
       "type": "INT",
-      "value": "35044",
+      "value": 35044,
       "description": "GL_STATIC_DRAW"
     },
     {
       "name": "RL_STATIC_READ",
       "type": "INT",
-      "value": "35045",
+      "value": 35045,
       "description": "GL_STATIC_READ"
     },
     {
       "name": "RL_STATIC_COPY",
       "type": "INT",
-      "value": "35046",
+      "value": 35046,
       "description": "GL_STATIC_COPY"
     },
     {
       "name": "RL_DYNAMIC_DRAW",
       "type": "INT",
-      "value": "35048",
+      "value": 35048,
       "description": "GL_DYNAMIC_DRAW"
     },
     {
       "name": "RL_DYNAMIC_READ",
       "type": "INT",
-      "value": "35049",
+      "value": 35049,
       "description": "GL_DYNAMIC_READ"
     },
     {
       "name": "RL_DYNAMIC_COPY",
       "type": "INT",
-      "value": "35050",
+      "value": 35050,
       "description": "GL_DYNAMIC_COPY"
     },
     {
       "name": "RL_FRAGMENT_SHADER",
       "type": "INT",
-      "value": "35632",
+      "value": 35632,
       "description": "GL_FRAGMENT_SHADER"
     },
     {
       "name": "RL_VERTEX_SHADER",
       "type": "INT",
-      "value": "35633",
+      "value": 35633,
       "description": "GL_VERTEX_SHADER"
     },
     {
       "name": "RL_COMPUTE_SHADER",
       "type": "INT",
-      "value": "37305",
+      "value": 37305,
       "description": "GL_COMPUTE_SHADER"
     },
     {
       "name": "RL_ZERO",
       "type": "INT",
-      "value": "0",
+      "value": 0,
       "description": "GL_ZERO"
     },
     {
       "name": "RL_ONE",
       "type": "INT",
-      "value": "1",
+      "value": 1,
       "description": "GL_ONE"
     },
     {
       "name": "RL_SRC_COLOR",
       "type": "INT",
-      "value": "768",
+      "value": 768,
       "description": "GL_SRC_COLOR"
     },
     {
       "name": "RL_ONE_MINUS_SRC_COLOR",
       "type": "INT",
-      "value": "769",
+      "value": 769,
       "description": "GL_ONE_MINUS_SRC_COLOR"
     },
     {
       "name": "RL_SRC_ALPHA",
       "type": "INT",
-      "value": "770",
+      "value": 770,
       "description": "GL_SRC_ALPHA"
     },
     {
       "name": "RL_ONE_MINUS_SRC_ALPHA",
       "type": "INT",
-      "value": "771",
+      "value": 771,
       "description": "GL_ONE_MINUS_SRC_ALPHA"
     },
     {
       "name": "RL_DST_ALPHA",
       "type": "INT",
-      "value": "772",
+      "value": 772,
       "description": "GL_DST_ALPHA"
     },
     {
       "name": "RL_ONE_MINUS_DST_ALPHA",
       "type": "INT",
-      "value": "773",
+      "value": 773,
       "description": "GL_ONE_MINUS_DST_ALPHA"
     },
     {
       "name": "RL_DST_COLOR",
       "type": "INT",
-      "value": "774",
+      "value": 774,
       "description": "GL_DST_COLOR"
     },
     {
       "name": "RL_ONE_MINUS_DST_COLOR",
       "type": "INT",
-      "value": "775",
+      "value": 775,
       "description": "GL_ONE_MINUS_DST_COLOR"
     },
     {
       "name": "RL_SRC_ALPHA_SATURATE",
       "type": "INT",
-      "value": "776",
+      "value": 776,
       "description": "GL_SRC_ALPHA_SATURATE"
     },
     {
       "name": "RL_CONSTANT_COLOR",
       "type": "INT",
-      "value": "32769",
+      "value": 32769,
       "description": "GL_CONSTANT_COLOR"
     },
     {
       "name": "RL_ONE_MINUS_CONSTANT_COLOR",
       "type": "INT",
-      "value": "32770",
+      "value": 32770,
       "description": "GL_ONE_MINUS_CONSTANT_COLOR"
     },
     {
       "name": "RL_CONSTANT_ALPHA",
       "type": "INT",
-      "value": "32771",
+      "value": 32771,
       "description": "GL_CONSTANT_ALPHA"
     },
     {
       "name": "RL_ONE_MINUS_CONSTANT_ALPHA",
       "type": "INT",
-      "value": "32772",
+      "value": 32772,
       "description": "GL_ONE_MINUS_CONSTANT_ALPHA"
     },
     {
       "name": "RL_FUNC_ADD",
       "type": "INT",
-      "value": "32774",
+      "value": 32774,
       "description": "GL_FUNC_ADD"
     },
     {
       "name": "RL_MIN",
       "type": "INT",
-      "value": "32775",
+      "value": 32775,
       "description": "GL_MIN"
     },
     {
       "name": "RL_MAX",
       "type": "INT",
-      "value": "32776",
+      "value": 32776,
       "description": "GL_MAX"
     },
     {
       "name": "RL_FUNC_SUBTRACT",
       "type": "INT",
-      "value": "32778",
+      "value": 32778,
       "description": "GL_FUNC_SUBTRACT"
     },
     {
       "name": "RL_FUNC_REVERSE_SUBTRACT",
       "type": "INT",
-      "value": "32779",
+      "value": 32779,
       "description": "GL_FUNC_REVERSE_SUBTRACT"
     },
     {
       "name": "RL_BLEND_EQUATION",
       "type": "INT",
-      "value": "32777",
+      "value": 32777,
       "description": "GL_BLEND_EQUATION"
     },
     {
       "name": "RL_BLEND_EQUATION_RGB",
       "type": "INT",
-      "value": "32777",
+      "value": 32777,
       "description": "GL_BLEND_EQUATION_RGB   // (Same as BLEND_EQUATION)"
     },
     {
       "name": "RL_BLEND_EQUATION_ALPHA",
       "type": "INT",
-      "value": "34877",
+      "value": 34877,
       "description": "GL_BLEND_EQUATION_ALPHA"
     },
     {
       "name": "RL_BLEND_DST_RGB",
       "type": "INT",
-      "value": "32968",
+      "value": 32968,
       "description": "GL_BLEND_DST_RGB"
     },
     {
       "name": "RL_BLEND_SRC_RGB",
       "type": "INT",
-      "value": "32969",
+      "value": 32969,
       "description": "GL_BLEND_SRC_RGB"
     },
     {
       "name": "RL_BLEND_DST_ALPHA",
       "type": "INT",
-      "value": "32970",
+      "value": 32970,
       "description": "GL_BLEND_DST_ALPHA"
     },
     {
       "name": "RL_BLEND_SRC_ALPHA",
       "type": "INT",
-      "value": "32971",
+      "value": 32971,
       "description": "GL_BLEND_SRC_ALPHA"
     },
     {
       "name": "RL_BLEND_COLOR",
       "type": "INT",
-      "value": "32773",
+      "value": 32773,
       "description": "GL_BLEND_COLOR"
     },
     {
       "name": "RL_READ_FRAMEBUFFER",
       "type": "INT",
-      "value": "36008",
+      "value": 36008,
       "description": "GL_READ_FRAMEBUFFER"
     },
     {
       "name": "RL_DRAW_FRAMEBUFFER",
       "type": "INT",
-      "value": "36009",
+      "value": 36009,
       "description": "GL_DRAW_FRAMEBUFFER"
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION",
+      "type": "INT",
+      "value": 0,
+      "description": ""
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD",
+      "type": "INT",
+      "value": 1,
+      "description": ""
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_NORMAL",
+      "type": "INT",
+      "value": 2,
+      "description": ""
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_COLOR",
+      "type": "INT",
+      "value": 3,
+      "description": ""
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_TANGENT",
+      "type": "INT",
+      "value": 4,
+      "description": ""
+    },
+    {
+      "name": "RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD2",
+      "type": "INT",
+      "value": 5,
+      "description": ""
     },
     {
       "name": "RL_MATRIX_TYPE",
@@ -591,7 +627,7 @@
     {
       "name": "PI",
       "type": "FLOAT",
-      "value": "3.14159265358979323846",
+      "value": 3.14159265358979323846,
       "description": ""
     },
     {
@@ -609,115 +645,127 @@
     {
       "name": "GL_SHADING_LANGUAGE_VERSION",
       "type": "INT",
-      "value": "35724",
+      "value": 35724,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGB_S3TC_DXT1_EXT",
       "type": "INT",
-      "value": "33776",
+      "value": 33776,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_S3TC_DXT1_EXT",
       "type": "INT",
-      "value": "33777",
+      "value": 33777,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_S3TC_DXT3_EXT",
       "type": "INT",
-      "value": "33778",
+      "value": 33778,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_S3TC_DXT5_EXT",
       "type": "INT",
-      "value": "33779",
+      "value": 33779,
       "description": ""
     },
     {
       "name": "GL_ETC1_RGB8_OES",
       "type": "INT",
-      "value": "36196",
+      "value": 36196,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGB8_ETC2",
       "type": "INT",
-      "value": "37492",
+      "value": 37492,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA8_ETC2_EAC",
       "type": "INT",
-      "value": "37496",
+      "value": 37496,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG",
       "type": "INT",
-      "value": "35840",
+      "value": 35840,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG",
       "type": "INT",
-      "value": "35842",
+      "value": 35842,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_ASTC_4x4_KHR",
       "type": "INT",
-      "value": "37808",
+      "value": 37808,
       "description": ""
     },
     {
       "name": "GL_COMPRESSED_RGBA_ASTC_8x8_KHR",
       "type": "INT",
-      "value": "37815",
+      "value": 37815,
       "description": ""
     },
     {
       "name": "GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT",
       "type": "INT",
-      "value": "34047",
+      "value": 34047,
       "description": ""
     },
     {
       "name": "GL_TEXTURE_MAX_ANISOTROPY_EXT",
       "type": "INT",
-      "value": "34046",
+      "value": 34046,
+      "description": ""
+    },
+    {
+      "name": "GL_PROGRAM_POINT_SIZE",
+      "type": "INT",
+      "value": 34370,
+      "description": ""
+    },
+    {
+      "name": "GL_LINE_WIDTH",
+      "type": "INT",
+      "value": 2849,
       "description": ""
     },
     {
       "name": "GL_UNSIGNED_SHORT_5_6_5",
       "type": "INT",
-      "value": "33635",
+      "value": 33635,
       "description": ""
     },
     {
       "name": "GL_UNSIGNED_SHORT_5_5_5_1",
       "type": "INT",
-      "value": "32820",
+      "value": 32820,
       "description": ""
     },
     {
       "name": "GL_UNSIGNED_SHORT_4_4_4_4",
       "type": "INT",
-      "value": "32819",
+      "value": 32819,
       "description": ""
     },
     {
       "name": "GL_LUMINANCE",
       "type": "INT",
-      "value": "6409",
+      "value": 6409,
       "description": ""
     },
     {
       "name": "GL_LUMINANCE_ALPHA",
       "type": "INT",
-      "value": "6410",
+      "value": 6410,
       "description": ""
     },
     {
@@ -742,37 +790,37 @@
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_POSITION",
       "type": "STRING",
       "value": "vertexPosition",
-      "description": "Bound by default to shader location: 0"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_POSITION"
     },
     {
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD",
       "type": "STRING",
       "value": "vertexTexCoord",
-      "description": "Bound by default to shader location: 1"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD"
     },
     {
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_NORMAL",
       "type": "STRING",
       "value": "vertexNormal",
-      "description": "Bound by default to shader location: 2"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_NORMAL"
     },
     {
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_COLOR",
       "type": "STRING",
       "value": "vertexColor",
-      "description": "Bound by default to shader location: 3"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_COLOR"
     },
     {
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_TANGENT",
       "type": "STRING",
       "value": "vertexTangent",
-      "description": "Bound by default to shader location: 4"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TANGENT"
     },
     {
       "name": "RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD2",
       "type": "STRING",
       "value": "vertexTexCoord2",
-      "description": "Bound by default to shader location: 5"
+      "description": "Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD2"
     },
     {
       "name": "RL_DEFAULT_SHADER_UNIFORM_NAME_MVP",
@@ -827,6 +875,12 @@
       "type": "STRING",
       "value": "texture2",
       "description": "texture2 (texture slot active 2)"
+    },
+    {
+      "name": "rlMatrixToFloat(mat)",
+      "type": "MACRO",
+      "value": "(rlMatrixToFloatV(mat).v)",
+      "description": "Get float vector for Matrix"
     },
     {
       "name": "MIN(a,b)",
@@ -948,9 +1002,19 @@
           "description": "Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)"
         },
         {
+          "type": "float *",
+          "name": "normals",
+          "description": "Vertex normal (XYZ - 3 components per vertex) (shader-location = 2)"
+        },
+        {
           "type": "unsigned char *",
           "name": "colors",
           "description": "Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)"
+        },
+        {
+          "type": "#if defined(GRAPHICS_API_OPENGL_11) || defined(GRAPHICS_API_OPENunsigned int *",
+          "name": "indices",
+          "description": "Vertex indices (in case vertex data comes indexed) (6 indices per quad)"
         },
         {
           "type": "unsigned int *",
@@ -958,14 +1022,34 @@
           "description": "Vertex indices (in case vertex data comes indexed) (6 indices per quad)"
         },
         {
+          "type": "#endif",
+          "name": "indices",
+          "description": "Vertex indices (in case vertex data comes indexed) (6 indices per quad)"
+        },
+        {
+          "type": "#if defined(GRAPHICS_API_OPENGL_ES2)",
+          "name": "indices",
+          "description": "Vertex indices (in case vertex data comes indexed) (6 indices per quad)"
+        },
+        {
+          "type": "unsigned short *",
+          "name": "indices",
+          "description": "Vertex indices (in case vertex data comes indexed) (6 indices per quad)"
+        },
+        {
+          "type": "#endif",
+          "name": "vaoId",
+          "description": "OpenGL Vertex Array Object id"
+        },
+        {
           "type": "unsigned int",
           "name": "vaoId",
           "description": "OpenGL Vertex Array Object id"
         },
         {
-          "type": "unsigned int[4]",
+          "type": "unsigned int[5]",
           "name": "vboId",
-          "description": "OpenGL Vertex Buffer Objects id (4 types of vertex data)"
+          "description": "OpenGL Vertex Buffer Objects id (5 types of vertex data)"
         }
       ]
     },
@@ -1254,6 +1338,17 @@
           "type": "int",
           "name": "framebufferHeight",
           "description": "Current framebuffer height"
+        }
+      ]
+    },
+    {
+      "name": "rl_float16",
+      "description": "Auxiliar matrix math functions",
+      "fields": [
+        {
+          "type": "float[16]",
+          "name": "v",
+          "description": ""
         }
       ]
     }
@@ -2081,6 +2176,31 @@
       ]
     },
     {
+      "name": "rlSetClipPlanes",
+      "description": "Set clip planes distances",
+      "returnType": "void",
+      "params": [
+        {
+          "type": "double",
+          "name": "nearPlane"
+        },
+        {
+          "type": "double",
+          "name": "farPlane"
+        }
+      ]
+    },
+    {
+      "name": "rlGetCullDistanceNear",
+      "description": "Get cull plane distance near",
+      "returnType": "double"
+    },
+    {
+      "name": "rlGetCullDistanceFar",
+      "description": "Get cull plane distance far",
+      "returnType": "double"
+    },
+    {
       "name": "rlBegin",
       "description": "Initialize drawing mode (how to organize vertex)",
       "returnType": "void",
@@ -2454,6 +2574,11 @@
       "returnType": "void"
     },
     {
+      "name": "rlGetActiveFramebuffer",
+      "description": "Get the currently active render texture (fbo), 0 for default framebuffer",
+      "returnType": "unsigned int"
+    },
+    {
       "name": "rlActiveDrawBuffers",
       "description": "Activate multiple draw color buffers",
       "returnType": "void",
@@ -2509,7 +2634,7 @@
     },
     {
       "name": "rlBindFramebuffer",
-      "description": "Bind framebuffer (FBO) ",
+      "description": "Bind framebuffer (FBO)",
       "returnType": "void",
       "params": [
         {
@@ -3074,8 +3199,8 @@
           "name": "stride"
         },
         {
-          "type": "const void *",
-          "name": "pointer"
+          "type": "int",
+          "name": "offset"
         }
       ]
     },
@@ -3406,17 +3531,7 @@
     {
       "name": "rlLoadFramebuffer",
       "description": "Load an empty framebuffer",
-      "returnType": "unsigned int",
-      "params": [
-        {
-          "type": "int",
-          "name": "width"
-        },
-        {
-          "type": "int",
-          "name": "height"
-        }
-      ]
+      "returnType": "unsigned int"
     },
     {
       "name": "rlFramebufferAttach",
@@ -3901,28 +4016,6 @@
       "name": "rlLoadDrawQuad",
       "description": "Load and draw a quad",
       "returnType": "void"
-    },
-    {
-      "name": "rlGetMatrixProjectionStereo",
-      "description": "",
-      "returnType": "Matrix",
-      "params": [
-        {
-          "type": "int",
-          "name": "eye"
-        }
-      ]
-    },
-    {
-      "name": "rlGetMatrixViewOffsetStereo",
-      "description": "",
-      "returnType": "Matrix",
-      "params": [
-        {
-          "type": "int",
-          "name": "eye"
-        }
-      ]
     }
   ]
 }

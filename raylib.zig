@@ -1313,12 +1313,11 @@ pub fn GetWindowScaleDPI() Vector2 {
 pub fn GetMonitorName(
     monitor: i32,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetMonitorName(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetMonitorName(
             monitor,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Set clipboard text content
@@ -1332,10 +1331,9 @@ pub fn SetClipboardText(
 
 /// Get clipboard text content
 pub fn GetClipboardText() [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetClipboardText()),
-    );
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetClipboardText(),
+    ));
 }
 
 /// Enable waiting for events on EndDrawing(), no automatic event polling
@@ -1648,40 +1646,34 @@ pub fn UnloadShader(
     );
 }
 
-/// Get a ray trace from mouse position
-pub fn GetMouseRay(
-    mousePosition: Vector2,
+/// Get a ray trace from screen position (i.e mouse)
+pub fn GetScreenToWorldRay(
+    position: Vector2,
     camera: Camera3D,
 ) Ray {
     var out: Ray = undefined;
-    raylib.mGetMouseRay(
+    raylib.mGetScreenToWorldRay(
         @as([*c]raylib.Ray, @ptrCast(&out)),
-        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&mousePosition))),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&position))),
         @as([*c]raylib.Camera3D, @ptrFromInt(@intFromPtr(&camera))),
     );
     return out;
 }
 
-/// Get camera transform matrix (view matrix)
-pub fn GetCameraMatrix(
+/// Get a ray trace from screen position (i.e mouse) in a viewport
+pub fn GetScreenToWorldRayEx(
+    position: Vector2,
     camera: Camera3D,
-) Matrix {
-    var out: Matrix = undefined;
-    raylib.mGetCameraMatrix(
-        @as([*c]raylib.Matrix, @ptrCast(&out)),
+    width: i32,
+    height: i32,
+) Ray {
+    var out: Ray = undefined;
+    raylib.mGetScreenToWorldRayEx(
+        @as([*c]raylib.Ray, @ptrCast(&out)),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&position))),
         @as([*c]raylib.Camera3D, @ptrFromInt(@intFromPtr(&camera))),
-    );
-    return out;
-}
-
-/// Get camera 2d transform matrix
-pub fn GetCameraMatrix2D(
-    camera: Camera2D,
-) Matrix {
-    var out: Matrix = undefined;
-    raylib.mGetCameraMatrix2D(
-        @as([*c]raylib.Matrix, @ptrCast(&out)),
-        @as([*c]raylib.Camera2D, @ptrFromInt(@intFromPtr(&camera))),
+        width,
+        height,
     );
     return out;
 }
@@ -1696,20 +1688,6 @@ pub fn GetWorldToScreen(
         @as([*c]raylib.Vector2, @ptrCast(&out)),
         @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&position))),
         @as([*c]raylib.Camera3D, @ptrFromInt(@intFromPtr(&camera))),
-    );
-    return out;
-}
-
-/// Get the world space position for a 2d camera screen space position
-pub fn GetScreenToWorld2D(
-    position: Vector2,
-    camera: Camera2D,
-) Vector2 {
-    var out: Vector2 = undefined;
-    raylib.mGetScreenToWorld2D(
-        @as([*c]raylib.Vector2, @ptrCast(&out)),
-        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&position))),
-        @as([*c]raylib.Camera2D, @ptrFromInt(@intFromPtr(&camera))),
     );
     return out;
 }
@@ -1741,6 +1719,44 @@ pub fn GetWorldToScreen2D(
     raylib.mGetWorldToScreen2D(
         @as([*c]raylib.Vector2, @ptrCast(&out)),
         @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&position))),
+        @as([*c]raylib.Camera2D, @ptrFromInt(@intFromPtr(&camera))),
+    );
+    return out;
+}
+
+/// Get the world space position for a 2d camera screen space position
+pub fn GetScreenToWorld2D(
+    position: Vector2,
+    camera: Camera2D,
+) Vector2 {
+    var out: Vector2 = undefined;
+    raylib.mGetScreenToWorld2D(
+        @as([*c]raylib.Vector2, @ptrCast(&out)),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&position))),
+        @as([*c]raylib.Camera2D, @ptrFromInt(@intFromPtr(&camera))),
+    );
+    return out;
+}
+
+/// Get camera transform matrix (view matrix)
+pub fn GetCameraMatrix(
+    camera: Camera3D,
+) Matrix {
+    var out: Matrix = undefined;
+    raylib.mGetCameraMatrix(
+        @as([*c]raylib.Matrix, @ptrCast(&out)),
+        @as([*c]raylib.Camera3D, @ptrFromInt(@intFromPtr(&camera))),
+    );
+    return out;
+}
+
+/// Get camera 2d transform matrix
+pub fn GetCameraMatrix2D(
+    camera: Camera2D,
+) Matrix {
+    var out: Matrix = undefined;
+    raylib.mGetCameraMatrix2D(
+        @as([*c]raylib.Matrix, @ptrCast(&out)),
         @as([*c]raylib.Camera2D, @ptrFromInt(@intFromPtr(&camera))),
     );
     return out;
@@ -1815,14 +1831,13 @@ pub fn LoadRandomSequence(
     min: i32,
     max: i32,
 ) ?[*]i32 {
-    return @as(
-        ?[*]i32,
-        @ptrCast(raylib.mLoadRandomSequence(
+    return @as(?[*]i32, @ptrCast(
+        raylib.mLoadRandomSequence(
             count,
             min,
             max,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload random values sequence
@@ -1927,12 +1942,11 @@ pub fn ExportDataAsCode(
 pub fn LoadFileText(
     fileName: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mLoadFileText(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mLoadFileText(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileName))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload file text data allocated by LoadFileText()
@@ -1997,76 +2011,69 @@ pub fn GetFileLength(
 pub fn GetFileExtension(
     fileName: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetFileExtension(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetFileExtension(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileName))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get pointer to filename for a path string
 pub fn GetFileName(
     filePath: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetFileName(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetFileName(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(filePath))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get filename string without extension (uses static string)
 pub fn GetFileNameWithoutExt(
     filePath: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetFileNameWithoutExt(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetFileNameWithoutExt(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(filePath))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get full path for a given fileName with path (uses static string)
 pub fn GetDirectoryPath(
     filePath: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetDirectoryPath(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetDirectoryPath(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(filePath))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get previous directory path for a given path (uses static string)
 pub fn GetPrevDirectoryPath(
     dirPath: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetPrevDirectoryPath(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetPrevDirectoryPath(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(dirPath))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get current working directory (uses static string)
 pub fn GetWorkingDirectory() [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetWorkingDirectory()),
-    );
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetWorkingDirectory(),
+    ));
 }
 
 /// Get the directory of the running application (uses static string)
 pub fn GetApplicationDirectory() [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetApplicationDirectory()),
-    );
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetApplicationDirectory(),
+    ));
 }
 
 /// Change working directory, return true on success
@@ -2084,6 +2091,15 @@ pub fn IsPathFile(
 ) bool {
     return raylib.mIsPathFile(
         @as([*c]const u8, @ptrFromInt(@intFromPtr(path))),
+    );
+}
+
+/// Check if fileName is valid for the platform/OS
+pub fn IsFileNameValid(
+    fileName: [*:0]const u8,
+) bool {
+    return raylib.mIsFileNameValid(
+        @as([*c]const u8, @ptrFromInt(@intFromPtr(fileName))),
     );
 }
 
@@ -2162,14 +2178,13 @@ pub fn CompressData(
     dataSize: i32,
     compDataSize: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mCompressData(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mCompressData(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(data))),
             dataSize,
             @as([*c]i32, @ptrCast(compDataSize)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Decompress data (DEFLATE algorithm), memory must be MemFree()
@@ -2178,14 +2193,13 @@ pub fn DecompressData(
     compDataSize: i32,
     dataSize: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mDecompressData(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mDecompressData(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(compData))),
             compDataSize,
             @as([*c]i32, @ptrCast(dataSize)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Encode data to Base64 string, memory must be MemFree()
@@ -2194,14 +2208,13 @@ pub fn EncodeDataBase64(
     dataSize: i32,
     outputSize: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mEncodeDataBase64(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mEncodeDataBase64(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(data))),
             dataSize,
             @as([*c]i32, @ptrCast(outputSize)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Decode Base64 string data, memory must be MemFree()
@@ -2209,13 +2222,12 @@ pub fn DecodeDataBase64(
     data: [*:0]const u8,
     outputSize: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mDecodeDataBase64(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mDecodeDataBase64(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(data))),
             @as([*c]i32, @ptrCast(outputSize)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Load automation events list from file, NULL for empty list, capacity = MAX_AUTOMATION_EVENTS
@@ -2364,12 +2376,11 @@ pub fn IsGamepadAvailable(
 pub fn GetGamepadName(
     gamepad: i32,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mGetGamepadName(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mGetGamepadName(
             gamepad,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Check if a gamepad button has been pressed once
@@ -2442,6 +2453,19 @@ pub fn SetGamepadMappings(
 ) i32 {
     return raylib.mSetGamepadMappings(
         @as([*c]const u8, @ptrFromInt(@intFromPtr(mappings))),
+    );
+}
+
+/// Set gamepad vibration for both motors
+pub fn SetGamepadVibration(
+    gamepad: i32,
+    leftMotor: f32,
+    rightMotor: f32,
+) void {
+    raylib.mSetGamepadVibration(
+        gamepad,
+        leftMotor,
+        rightMotor,
     );
 }
 
@@ -2783,7 +2807,7 @@ pub fn DrawLineEx(
 
 /// Draw lines sequence (using gl lines)
 pub fn DrawLineStrip(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     color: Color,
 ) void {
@@ -3152,15 +3176,30 @@ pub fn DrawRectangleRounded(
     );
 }
 
-/// Draw rectangle with rounded edges outline
+/// Draw rectangle lines with rounded edges
 pub fn DrawRectangleRoundedLines(
+    rec: Rectangle,
+    roundness: f32,
+    segments: i32,
+    color: Color,
+) void {
+    raylib.mDrawRectangleRoundedLines(
+        @as([*c]raylib.Rectangle, @ptrFromInt(@intFromPtr(&rec))),
+        roundness,
+        segments,
+        @as([*c]raylib.Color, @ptrFromInt(@intFromPtr(&color))),
+    );
+}
+
+/// Draw rectangle with rounded edges outline
+pub fn DrawRectangleRoundedLinesEx(
     rec: Rectangle,
     roundness: f32,
     segments: i32,
     lineThick: f32,
     color: Color,
 ) void {
-    raylib.mDrawRectangleRoundedLines(
+    raylib.mDrawRectangleRoundedLinesEx(
         @as([*c]raylib.Rectangle, @ptrFromInt(@intFromPtr(&rec))),
         roundness,
         segments,
@@ -3201,7 +3240,7 @@ pub fn DrawTriangleLines(
 
 /// Draw a triangle fan defined by points (first vertex is the center)
 pub fn DrawTriangleFan(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     color: Color,
 ) void {
@@ -3214,7 +3253,7 @@ pub fn DrawTriangleFan(
 
 /// Draw a triangle strip defined by points
 pub fn DrawTriangleStrip(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     color: Color,
 ) void {
@@ -3280,7 +3319,7 @@ pub fn DrawPolyLinesEx(
 
 /// Draw spline: Linear, minimum 2 points
 pub fn DrawSplineLinear(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     thick: f32,
     color: Color,
@@ -3295,7 +3334,7 @@ pub fn DrawSplineLinear(
 
 /// Draw spline: B-Spline, minimum 4 points
 pub fn DrawSplineBasis(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     thick: f32,
     color: Color,
@@ -3310,7 +3349,7 @@ pub fn DrawSplineBasis(
 
 /// Draw spline: Catmull-Rom, minimum 4 points
 pub fn DrawSplineCatmullRom(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     thick: f32,
     color: Color,
@@ -3325,7 +3364,7 @@ pub fn DrawSplineCatmullRom(
 
 /// Draw spline: Quadratic Bezier, minimum 3 points (1 control point): [p1, c2, p3, c4...]
 pub fn DrawSplineBezierQuadratic(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     thick: f32,
     color: Color,
@@ -3340,7 +3379,7 @@ pub fn DrawSplineBezierQuadratic(
 
 /// Draw spline: Cubic Bezier, minimum 4 points (2 control points): [p1, c2, c3, p4, c5, c6...]
 pub fn DrawSplineBezierCubic(
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
     thick: f32,
     color: Color,
@@ -3617,7 +3656,7 @@ pub fn CheckCollisionPointTriangle(
 /// Check if point is within a polygon described by array of vertices
 pub fn CheckCollisionPointPoly(
     point: Vector2,
-    points: ?[*]Vector2,
+    points: ?[*]const Vector2,
     pointCount: i32,
 ) bool {
     return raylib.mCheckCollisionPointPoly(
@@ -3656,6 +3695,21 @@ pub fn CheckCollisionPointLine(
         @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&p1))),
         @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&p2))),
         threshold,
+    );
+}
+
+/// Check if circle collides with a line created betweeen two points [p1] and [p2]
+pub fn CheckCollisionCircleLine(
+    center: Vector2,
+    radius: f32,
+    p1: Vector2,
+    p2: Vector2,
+) bool {
+    return raylib.mCheckCollisionCircleLine(
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&center))),
+        radius,
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&p1))),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&p2))),
     );
 }
 
@@ -3825,14 +3879,13 @@ pub fn ExportImageToMemory(
     fileType: [*:0]const u8,
     fileSize: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mExportImageToMemory(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mExportImageToMemory(
             @as([*c]raylib.Image, @ptrFromInt(@intFromPtr(&image))),
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileType))),
             @as([*c]i32, @ptrCast(fileSize)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Export image as code file defining an array of bytes, returns true on success
@@ -4361,12 +4414,11 @@ pub fn ImageColorReplace(
 pub fn LoadImageColors(
     image: Image,
 ) ?[*]Color {
-    return @as(
-        ?[*]Color,
-        @ptrCast(raylib.mLoadImageColors(
+    return @as(?[*]Color, @ptrCast(
+        raylib.mLoadImageColors(
             @as([*c]raylib.Image, @ptrFromInt(@intFromPtr(&image))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Load colors palette from image as a Color array (RGBA - 32bit)
@@ -4375,14 +4427,13 @@ pub fn LoadImagePalette(
     maxPaletteSize: i32,
     colorCount: ?[*]i32,
 ) ?[*]Color {
-    return @as(
-        ?[*]Color,
-        @ptrCast(raylib.mLoadImagePalette(
+    return @as(?[*]Color, @ptrCast(
+        raylib.mLoadImagePalette(
             @as([*c]raylib.Image, @ptrFromInt(@intFromPtr(&image))),
             maxPaletteSize,
             @as([*c]i32, @ptrCast(colorCount)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload color data loaded with LoadImageColors()
@@ -4921,6 +4972,17 @@ pub fn DrawTextureNPatch(
     );
 }
 
+/// Check if two colors are equal
+pub fn ColorIsEqual(
+    col1: Color,
+    col2: Color,
+) bool {
+    return raylib.mColorIsEqual(
+        @as([*c]raylib.Color, @ptrFromInt(@intFromPtr(&col1))),
+        @as([*c]raylib.Color, @ptrFromInt(@intFromPtr(&col2))),
+    );
+}
+
 /// Get color with alpha applied, alpha goes from 0.0f to 1.0f
 pub fn Fade(
     color: Color,
@@ -4935,7 +4997,7 @@ pub fn Fade(
     return out;
 }
 
-/// Get hexadecimal value for a Color
+/// Get hexadecimal value for a Color (0xRRGGBBAA)
 pub fn ColorToInt(
     color: Color,
 ) i32 {
@@ -5427,13 +5489,12 @@ pub fn LoadUTF8(
     codepoints: ?[*]const i32,
     length: i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mLoadUTF8(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mLoadUTF8(
             @as([*c]const i32, @ptrFromInt(@intFromPtr(codepoints))),
             length,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload UTF-8 text encoded from codepoints array
@@ -5450,13 +5511,12 @@ pub fn LoadCodepoints(
     text: [*:0]const u8,
     count: ?[*]i32,
 ) ?[*]i32 {
-    return @as(
-        ?[*]i32,
-        @ptrCast(raylib.mLoadCodepoints(
+    return @as(?[*]i32, @ptrCast(
+        raylib.mLoadCodepoints(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
             @as([*c]i32, @ptrCast(count)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload codepoints data from memory
@@ -5515,13 +5575,12 @@ pub fn CodepointToUTF8(
     codepoint: i32,
     utf8Size: ?[*]i32,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mCodepointToUTF8(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mCodepointToUTF8(
             codepoint,
             @as([*c]i32, @ptrCast(utf8Size)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Copy one string to another, returns bytes copied
@@ -5570,14 +5629,13 @@ pub fn TextSubtext(
     position: i32,
     length: i32,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mTextSubtext(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextSubtext(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
             position,
             length,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Replace text string (WARNING: memory must be freed!)
@@ -5586,14 +5644,13 @@ pub fn TextReplace(
     replace: [*:0]const u8,
     by: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mTextReplace(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mTextReplace(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
             @as([*c]const u8, @ptrFromInt(@intFromPtr(replace))),
             @as([*c]const u8, @ptrFromInt(@intFromPtr(by))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Insert text in a position (WARNING: memory must be freed!)
@@ -5602,14 +5659,13 @@ pub fn TextInsert(
     insert: [*:0]const u8,
     position: i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mTextInsert(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mTextInsert(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
             @as([*c]const u8, @ptrFromInt(@intFromPtr(insert))),
             position,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Load font data for further use
@@ -5621,17 +5677,16 @@ pub fn LoadFontData(
     glyphCount: i32,
     typ: i32,
 ) [*]GlyphInfo {
-    return @as(
-        [*]GlyphInfo,
-        @ptrCast(raylib.mLoadFontData(
+    return @as([*]GlyphInfo, @ptrCast(
+        raylib.mLoadFontData(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileData))),
             dataSize,
             fontSize,
             @as([*c]i32, @ptrCast(fontChars)),
             glyphCount,
             typ,
-        )),
-    );
+        ),
+    ));
 }
 
 ///
@@ -5668,36 +5723,55 @@ pub fn TextFindIndex(
 pub fn TextToUpper(
     text: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mTextToUpper(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextToUpper(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get lower case version of provided string
 pub fn TextToLower(
     text: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mTextToLower(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextToLower(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Get Pascal case notation version of provided string
 pub fn TextToPascal(
     text: [*:0]const u8,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mTextToPascal(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextToPascal(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
-        )),
-    );
+        ),
+    ));
+}
+
+/// Get Snake case notation version of provided string
+pub fn TextToSnake(
+    text: [*:0]const u8,
+) [*:0]const u8 {
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextToSnake(
+            @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
+        ),
+    ));
+}
+
+/// Get Camel case notation version of provided string
+pub fn TextToCamel(
+    text: [*:0]const u8,
+) [*:0]const u8 {
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mTextToCamel(
+            @as([*c]const u8, @ptrFromInt(@intFromPtr(text))),
+        ),
+    ));
 }
 
 /// Get integer value from text (negative values not supported)
@@ -5776,7 +5850,7 @@ pub fn DrawTriangle3D(
 
 /// Draw a triangle strip defined by points
 pub fn DrawTriangleStrip3D(
-    points: ?[*]Vector3,
+    points: ?[*]const Vector3,
     pointCount: i32,
     color: Color,
 ) void {
@@ -6526,13 +6600,12 @@ pub fn LoadMaterials(
     fileName: [*:0]const u8,
     materialCount: ?[*]i32,
 ) ?[*]Material {
-    return @as(
-        ?[*]Material,
-        @ptrCast(raylib.mLoadMaterials(
+    return @as(?[*]Material, @ptrCast(
+        raylib.mLoadMaterials(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileName))),
             @as([*c]i32, @ptrCast(materialCount)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Load default material (Supports: DIFFUSE, SPECULAR, NORMAL maps)
@@ -6593,13 +6666,12 @@ pub fn LoadModelAnimations(
     fileName: [*:0]const u8,
     animCount: ?[*]i32,
 ) ?[*]ModelAnimation {
-    return @as(
-        ?[*]ModelAnimation,
-        @ptrCast(raylib.mLoadModelAnimations(
+    return @as(?[*]ModelAnimation, @ptrCast(
+        raylib.mLoadModelAnimations(
             @as([*c]const u8, @ptrFromInt(@intFromPtr(fileName))),
             @as([*c]i32, @ptrCast(animCount)),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Update model animation pose
@@ -7032,16 +7104,16 @@ pub fn WaveCopy(
     return out;
 }
 
-/// Crop a wave to defined samples range
+/// Crop a wave to defined frames range
 pub fn WaveCrop(
     wave: ?[*]Wave,
-    initSample: i32,
-    finalSample: i32,
+    initFrame: i32,
+    finalFrame: i32,
 ) void {
     raylib.mWaveCrop(
         @as([*c]raylib.Wave, @ptrFromInt(@intFromPtr(wave))),
-        initSample,
-        finalSample,
+        initFrame,
+        finalFrame,
     );
 }
 
@@ -7064,12 +7136,11 @@ pub fn WaveFormat(
 pub fn LoadWaveSamples(
     wave: Wave,
 ) ?[*]f32 {
-    return @as(
-        ?[*]f32,
-        @ptrCast(raylib.mLoadWaveSamples(
+    return @as(?[*]f32, @ptrCast(
+        raylib.mLoadWaveSamples(
             @as([*c]raylib.Wave, @ptrFromInt(@intFromPtr(&wave))),
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload samples data loaded with LoadWaveSamples()
@@ -7397,7 +7468,7 @@ pub fn SetAudioStreamCallback(
     );
 }
 
-/// Attach audio stream processor to stream, receives the samples as <float>s
+/// Attach audio stream processor to stream, receives the samples as 'float'
 pub fn AttachAudioStreamProcessor(
     stream: AudioStream,
     processor: AudioCallback,
@@ -7419,7 +7490,7 @@ pub fn DetachAudioStreamProcessor(
     );
 }
 
-/// Attach audio stream processor to the entire audio pipeline, receives the samples as <float>s
+/// Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'
 pub fn AttachAudioMixedProcessor(
     processor: AudioCallback,
 ) void {
@@ -7562,6 +7633,27 @@ pub fn rlViewport(
         width,
         height,
     );
+}
+
+/// Set clip planes distances
+pub fn rlSetClipPlanes(
+    nearPlane: f64,
+    farPlane: f64,
+) void {
+    raylib.mrlSetClipPlanes(
+        nearPlane,
+        farPlane,
+    );
+}
+
+/// Get cull plane distance near
+pub fn rlGetCullDistanceNear() f64 {
+    return raylib.mrlGetCullDistanceNear();
+}
+
+/// Get cull plane distance far
+pub fn rlGetCullDistanceFar() f64 {
+    return raylib.mrlGetCullDistanceFar();
 }
 
 /// Initialize drawing mode (how to organize vertex)
@@ -7829,6 +7921,11 @@ pub fn rlEnableFramebuffer(
 /// Disable render texture (fbo), return to default framebuffer
 pub fn rlDisableFramebuffer() void {
     raylib.mrlDisableFramebuffer();
+}
+
+/// Get the currently active render texture (fbo), 0 for default framebuffer
+pub fn rlGetActiveFramebuffer() u32 {
+    return raylib.mrlGetActiveFramebuffer();
 }
 
 /// Activate multiple draw color buffers
@@ -8155,10 +8252,9 @@ pub fn rlGetShaderIdDefault() u32 {
 
 /// Get default shader locations
 pub fn rlGetShaderLocsDefault() ?[*]i32 {
-    return @as(
-        ?[*]i32,
-        @ptrCast(raylib.mrlGetShaderLocsDefault()),
-    );
+    return @as(?[*]i32, @ptrCast(
+        raylib.mrlGetShaderLocsDefault(),
+    ));
 }
 
 /// Load a render batch system
@@ -8476,12 +8572,11 @@ pub fn rlGetGlTextureFormats(
 pub fn rlGetPixelFormatName(
     format: u32,
 ) [*:0]const u8 {
-    return @as(
-        [*:0]const u8,
-        @ptrCast(raylib.mrlGetPixelFormatName(
+    return @as([*:0]const u8, @ptrCast(
+        raylib.mrlGetPixelFormatName(
             format,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Unload texture from GPU memory
@@ -8517,15 +8612,14 @@ pub fn rlReadTexturePixels(
     height: i32,
     format: i32,
 ) *anyopaque {
-    return @as(
-        *anyopaque,
-        @ptrCast(raylib.mrlReadTexturePixels(
+    return @as(*anyopaque, @ptrCast(
+        raylib.mrlReadTexturePixels(
             id,
             width,
             height,
             format,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Read screen pixel data (color buffer)
@@ -8533,24 +8627,17 @@ pub fn rlReadScreenPixels(
     width: i32,
     height: i32,
 ) [*:0]const u8 {
-    return @as(
-        ?[*]u8,
-        @ptrCast(raylib.mrlReadScreenPixels(
+    return @as(?[*]u8, @ptrCast(
+        raylib.mrlReadScreenPixels(
             width,
             height,
-        )),
-    );
+        ),
+    ));
 }
 
 /// Load an empty framebuffer
-pub fn rlLoadFramebuffer(
-    width: i32,
-    height: i32,
-) u32 {
-    return raylib.mrlLoadFramebuffer(
-        width,
-        height,
-    );
+pub fn rlLoadFramebuffer() u32 {
+    return raylib.mrlLoadFramebuffer();
 }
 
 /// Attach texture/renderbuffer to a framebuffer
@@ -8842,7 +8929,7 @@ pub fn rlGetMatrixTransform() Matrix {
     return out;
 }
 
-///
+/// Get internal projection matrix for stereo render (selected eye)
 pub fn rlGetMatrixProjectionStereo(
     eye: i32,
 ) Matrix {
@@ -8854,7 +8941,7 @@ pub fn rlGetMatrixProjectionStereo(
     return out;
 }
 
-///
+/// Get internal view offset matrix for stereo render (selected eye)
 pub fn rlGetMatrixViewOffsetStereo(
     eye: i32,
 ) Matrix {
@@ -9254,6 +9341,34 @@ pub fn Vector2Reflect(
 }
 
 ///
+pub fn Vector2Min(
+    v1: Vector2,
+    v2: Vector2,
+) Vector2 {
+    var out: Vector2 = undefined;
+    raylib.mVector2Min(
+        @as([*c]raylib.Vector2, @ptrCast(&out)),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector2Max(
+    v1: Vector2,
+    v2: Vector2,
+) Vector2 {
+    var out: Vector2 = undefined;
+    raylib.mVector2Max(
+        @as([*c]raylib.Vector2, @ptrCast(&out)),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
 pub fn Vector2Rotate(
     v: Vector2,
     angle: f32,
@@ -9336,6 +9451,22 @@ pub fn Vector2Equals(
         @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&p))),
         @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&q))),
     );
+}
+
+///
+pub fn Vector2Refract(
+    v: Vector2,
+    n: Vector2,
+    r: f32,
+) Vector2 {
+    var out: Vector2 = undefined;
+    raylib.mVector2Refract(
+        @as([*c]raylib.Vector2, @ptrCast(&out)),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&v))),
+        @as([*c]raylib.Vector2, @ptrFromInt(@intFromPtr(&n))),
+        r,
+    );
+    return out;
 }
 
 ///
@@ -9650,6 +9781,22 @@ pub fn Vector3RotateByAxisAngle(
 }
 
 ///
+pub fn Vector3MoveTowards(
+    v: Vector3,
+    target: Vector3,
+    maxDistance: f32,
+) Vector3 {
+    var out: Vector3 = undefined;
+    raylib.mVector3MoveTowards(
+        @as([*c]raylib.Vector3, @ptrCast(&out)),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&v))),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&target))),
+        maxDistance,
+    );
+    return out;
+}
+
+///
 pub fn Vector3Lerp(
     v1: Vector3,
     v2: Vector3,
@@ -9660,6 +9807,26 @@ pub fn Vector3Lerp(
         @as([*c]raylib.Vector3, @ptrCast(&out)),
         @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&v1))),
         @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&v2))),
+        amount,
+    );
+    return out;
+}
+
+///
+pub fn Vector3CubicHermite(
+    v1: Vector3,
+    tangent1: Vector3,
+    v2: Vector3,
+    tangent2: Vector3,
+    amount: f32,
+) Vector3 {
+    var out: Vector3 = undefined;
+    raylib.mVector3CubicHermite(
+        @as([*c]raylib.Vector3, @ptrCast(&out)),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&tangent1))),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&v2))),
+        @as([*c]raylib.Vector3, @ptrFromInt(@intFromPtr(&tangent2))),
         amount,
     );
     return out;
@@ -9822,6 +9989,280 @@ pub fn Vector3Refract(
         r,
     );
     return out;
+}
+
+///
+pub fn Vector4Zero() Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Zero(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+    );
+    return out;
+}
+
+///
+pub fn Vector4One() Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4One(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Add(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Add(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4AddValue(
+    v: Vector4,
+    add: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4AddValue(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+        add,
+    );
+    return out;
+}
+
+///
+pub fn Vector4Subtract(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Subtract(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4SubtractValue(
+    v: Vector4,
+    add: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4SubtractValue(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+        add,
+    );
+    return out;
+}
+
+///
+pub fn Vector4Length(
+    v: Vector4,
+) f32 {
+    return raylib.mVector4Length(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+    );
+}
+
+///
+pub fn Vector4LengthSqr(
+    v: Vector4,
+) f32 {
+    return raylib.mVector4LengthSqr(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+    );
+}
+
+///
+pub fn Vector4DotProduct(
+    v1: Vector4,
+    v2: Vector4,
+) f32 {
+    return raylib.mVector4DotProduct(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+}
+
+///
+pub fn Vector4Distance(
+    v1: Vector4,
+    v2: Vector4,
+) f32 {
+    return raylib.mVector4Distance(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+}
+
+///
+pub fn Vector4DistanceSqr(
+    v1: Vector4,
+    v2: Vector4,
+) f32 {
+    return raylib.mVector4DistanceSqr(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+}
+
+///
+pub fn Vector4Scale(
+    v: Vector4,
+    scale: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Scale(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+        scale,
+    );
+    return out;
+}
+
+///
+pub fn Vector4Multiply(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Multiply(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Negate(
+    v: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Negate(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Divide(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Divide(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Normalize(
+    v: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Normalize(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Min(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Min(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Max(
+    v1: Vector4,
+    v2: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Max(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Lerp(
+    v1: Vector4,
+    v2: Vector4,
+    amount: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Lerp(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v2))),
+        amount,
+    );
+    return out;
+}
+
+///
+pub fn Vector4MoveTowards(
+    v: Vector4,
+    target: Vector4,
+    maxDistance: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4MoveTowards(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&target))),
+        maxDistance,
+    );
+    return out;
+}
+
+///
+pub fn Vector4Invert(
+    v: Vector4,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mVector4Invert(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&v))),
+    );
+    return out;
+}
+
+///
+pub fn Vector4Equals(
+    p: Vector4,
+    q: Vector4,
+) i32 {
+    return raylib.mVector4Equals(
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&p))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&q))),
+    );
 }
 
 ///
@@ -10029,8 +10470,8 @@ pub fn MatrixFrustum(
     right: f64,
     bottom: f64,
     top: f64,
-    near: f64,
-    far: f64,
+    nearPlane: f64,
+    farPlane: f64,
 ) Matrix {
     var out: Matrix = undefined;
     raylib.mMatrixFrustum(
@@ -10039,8 +10480,8 @@ pub fn MatrixFrustum(
         right,
         bottom,
         top,
-        near,
-        far,
+        nearPlane,
+        farPlane,
     );
     return out;
 }
@@ -10297,6 +10738,26 @@ pub fn QuaternionSlerp(
         @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&q1))),
         @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&q2))),
         amount,
+    );
+    return out;
+}
+
+///
+pub fn QuaternionCubicHermiteSpline(
+    q1: Vector4,
+    outTangent1: Vector4,
+    q2: Vector4,
+    inTangent2: Vector4,
+    t: f32,
+) Vector4 {
+    var out: Vector4 = undefined;
+    raylib.mQuaternionCubicHermiteSpline(
+        @as([*c]raylib.Vector4, @ptrCast(&out)),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&q1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&outTangent1))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&q2))),
+        @as([*c]raylib.Vector4, @ptrFromInt(@intFromPtr(&inTangent2))),
+        t,
     );
     return out;
 }
@@ -10819,6 +11280,12 @@ pub const rlRenderBatch = extern struct {
     currentDepth: f32,
 };
 
+/// Auxiliar matrix math functions
+pub const rl_float16 = extern struct {
+    ///
+    v: [16]f32,
+};
+
 /// NOTE: Helper types to be used instead of array return types for *ToFloat functions
 pub const float3 = extern struct {
     ///
@@ -11131,17 +11598,17 @@ pub const GamepadButton = enum(i32) {
     GAMEPAD_BUTTON_LEFT_FACE_LEFT = 4,
     /// Gamepad right button up (i.e. PS3: Triangle, Xbox: Y)
     GAMEPAD_BUTTON_RIGHT_FACE_UP = 5,
-    /// Gamepad right button right (i.e. PS3: Square, Xbox: X)
+    /// Gamepad right button right (i.e. PS3: Circle, Xbox: B)
     GAMEPAD_BUTTON_RIGHT_FACE_RIGHT = 6,
     /// Gamepad right button down (i.e. PS3: Cross, Xbox: A)
     GAMEPAD_BUTTON_RIGHT_FACE_DOWN = 7,
-    /// Gamepad right button left (i.e. PS3: Circle, Xbox: B)
+    /// Gamepad right button left (i.e. PS3: Square, Xbox: X)
     GAMEPAD_BUTTON_RIGHT_FACE_LEFT = 8,
     /// Gamepad top/back trigger left (first), it could be a trailing button
     GAMEPAD_BUTTON_LEFT_TRIGGER_1 = 9,
     /// Gamepad top/back trigger left (second), it could be a trailing button
     GAMEPAD_BUTTON_LEFT_TRIGGER_2 = 10,
-    /// Gamepad top/back trigger right (one), it could be a trailing button
+    /// Gamepad top/back trigger right (first), it could be a trailing button
     GAMEPAD_BUTTON_RIGHT_TRIGGER_1 = 11,
     /// Gamepad top/back trigger right (second), it could be a trailing button
     GAMEPAD_BUTTON_RIGHT_TRIGGER_2 = 12,
@@ -11443,15 +11910,15 @@ pub const Gesture = enum(i32) {
 
 /// Camera system modes
 pub const CameraMode = enum(i32) {
-    /// Custom camera
+    /// Camera custom, controlled by user (UpdateCamera() does nothing)
     CAMERA_CUSTOM = 0,
-    /// Free camera
+    /// Camera free mode
     CAMERA_FREE = 1,
-    /// Orbital camera
+    /// Camera orbital, around target, zoom supported
     CAMERA_ORBITAL = 2,
-    /// First person camera
+    /// Camera first person
     CAMERA_FIRST_PERSON = 3,
-    /// Third person camera
+    /// Camera third person
     CAMERA_THIRD_PERSON = 4,
 };
 
@@ -11760,7 +12227,7 @@ pub const RAYLIB_VERSION_PATCH: i32 = 0;
 pub const RAYLIB_VERSION: []const u8 = "5.1-dev";
 
 ///
-pub const PI: f32 = 3.14159265358979323846;
+pub const PI: f32 = 3.141592653589793e0;
 
 /// Light Gray
 pub const LIGHTGRAY: Color = .{ .r = 200, .g = 200, .b = 200, .a = 255 };
@@ -11841,7 +12308,7 @@ pub const MAGENTA: Color = .{ .r = 255, .g = 0, .b = 255, .a = 255 };
 pub const RAYWHITE: Color = .{ .r = 245, .g = 245, .b = 245, .a = 255 };
 
 ///
-pub const RLGL_VERSION: []const u8 = "4.5";
+pub const RLGL_VERSION: []const u8 = "5.0";
 
 ///
 pub const RL_DEFAULT_BATCH_BUFFER_ELEMENTS: i32 = 8192;
@@ -11862,10 +12329,10 @@ pub const RL_MAX_MATRIX_STACK_SIZE: i32 = 32;
 pub const RL_MAX_SHADER_LOCATIONS: i32 = 32;
 
 /// Default near cull distance
-pub const RL_CULL_DISTANCE_NEAR: f64 = 0.01;
+pub const RL_CULL_DISTANCE_NEAR: f64 = 1e-2;
 
 /// Default far cull distance
-pub const RL_CULL_DISTANCE_FAR: f64 = 1000.0;
+pub const RL_CULL_DISTANCE_FAR: f64 = 1e3;
 
 /// GL_TEXTURE_WRAP_S
 pub const RL_TEXTURE_WRAP_S: i32 = 10242;
@@ -12066,6 +12533,24 @@ pub const RL_READ_FRAMEBUFFER: i32 = 36008;
 pub const RL_DRAW_FRAMEBUFFER: i32 = 36009;
 
 ///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_POSITION: i32 = 0;
+
+///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD: i32 = 1;
+
+///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_NORMAL: i32 = 2;
+
+///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_COLOR: i32 = 3;
+
+///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_TANGENT: i32 = 4;
+
+///
+pub const RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD2: i32 = 5;
+
+///
 pub const GL_SHADING_LANGUAGE_VERSION: i32 = 35724;
 
 ///
@@ -12108,6 +12593,12 @@ pub const GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT: i32 = 34047;
 pub const GL_TEXTURE_MAX_ANISOTROPY_EXT: i32 = 34046;
 
 ///
+pub const GL_PROGRAM_POINT_SIZE: i32 = 34370;
+
+///
+pub const GL_LINE_WIDTH: i32 = 2849;
+
+///
 pub const GL_UNSIGNED_SHORT_5_6_5: i32 = 33635;
 
 ///
@@ -12122,22 +12613,22 @@ pub const GL_LUMINANCE: i32 = 6409;
 ///
 pub const GL_LUMINANCE_ALPHA: i32 = 6410;
 
-/// Bound by default to shader location: 0
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_POSITION
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_POSITION: []const u8 = "vertexPosition";
 
-/// Bound by default to shader location: 1
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD: []const u8 = "vertexTexCoord";
 
-/// Bound by default to shader location: 2
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_NORMAL
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_NORMAL: []const u8 = "vertexNormal";
 
-/// Bound by default to shader location: 3
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_COLOR
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_COLOR: []const u8 = "vertexColor";
 
-/// Bound by default to shader location: 4
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TANGENT
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_TANGENT: []const u8 = "vertexTangent";
 
-/// Bound by default to shader location: 5
+/// Bound by default to shader location: RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD2
 pub const RL_DEFAULT_SHADER_ATTRIB_NAME_TEXCOORD2: []const u8 = "vertexTexCoord2";
 
 /// model-view-projection matrix
@@ -12168,4 +12659,4 @@ pub const RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1: []const u8 = "texture1";
 pub const RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2: []const u8 = "texture2";
 
 ///
-pub const EPSILON: f32 = 0.000001;
+pub const EPSILON: f32 = 1e-6;

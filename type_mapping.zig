@@ -85,7 +85,7 @@ pub const Intermediate = struct {
                     continue :outer;
                 }
             }
-            const define = parseRaylibDefine(allocator, d) orelse continue :outer;
+            const define = try parseRaylibDefine(allocator, d) orelse continue :outer;
 
             if (i < defines.items.len) {
                 try defines.insert(i, define);
@@ -248,31 +248,38 @@ pub const Define = struct {
     custom: bool = false,
 };
 
-pub fn parseRaylibDefine(allocator: Allocator, s: RaylibDefine) ?Define {
+pub fn parseRaylibDefine(allocator: Allocator, s: RaylibDefine) !?Define {
     var typ: []const u8 = undefined;
     var value: []const u8 = undefined;
+    const strValue = try jsonStringify(allocator, s.value);
+    defer allocator.free(strValue);
 
     if (eql("INT", s.type)) {
         typ = "i32";
-        value = std.fmt.allocPrint(allocator, "{s}", .{s.value}) catch return null;
+        std.debug.print("i32: {s}", .{strValue});
+        value = std.fmt.allocPrint(allocator, "{s}", .{strValue}) catch return null;
     } else if (eql("LONG", s.type)) {
         typ = "i64";
-        value = std.fmt.allocPrint(allocator, "{s}", .{s.value}) catch return null;
+        std.debug.print("i64: {s}", .{strValue});
+        value = std.fmt.allocPrint(allocator, "{s}", .{strValue}) catch return null;
     } else if (eql("FLOAT", s.type)) {
         typ = "f32";
-        value = std.fmt.allocPrint(allocator, "{s}", .{s.value}) catch return null;
+        std.debug.print("f32: {s}", .{strValue});
+        value = std.fmt.allocPrint(allocator, "{s}", .{strValue}) catch return null;
     } else if (eql("DOUBLE", s.type)) {
         typ = "f64";
-        value = std.fmt.allocPrint(allocator, "{s}", .{s.value}) catch return null;
+        std.debug.print("f64: {s}", .{strValue});
+        value = std.fmt.allocPrint(allocator, "{s}", .{strValue}) catch return null;
     } else if (eql("STRING", s.type)) {
         typ = "[]const u8";
-        value = std.fmt.allocPrint(allocator, "\"{s}\"", .{s.value}) catch return null;
+        std.debug.print("[]const u8: {s}", .{strValue});
+        value = std.fmt.allocPrint(allocator, "\"{s}\"", .{strValue}) catch return null;
     } else if (eql("COLOR", s.type)) {
         typ = "Color";
-        std.debug.assert(startsWith(s.value, "CLITERAL(Color){"));
-        std.debug.assert(endsWith(s.value, "}"));
+        std.debug.assert(startsWith(strValue, "CLITERAL(Color){"));
+        std.debug.assert(endsWith(strValue, "}"));
 
-        const componentString = s.value["CLITERAL(Color){".len .. s.value.len - 1];
+        const componentString = strValue["CLITERAL(Color){".len .. strValue.len - 1];
         var spliterator = std.mem.split(u8, componentString, ",");
         var r = spliterator.next() orelse return null;
         r = std.mem.trim(u8, r, " \t\r\n");
@@ -454,7 +461,7 @@ test "toZig" {
     try expectEqualStrings("?[*]Vector2", try toZig(a, "Vector2 *"));
 }
 
-const raylibToZigType = std.ComptimeStringMap([]const u8, .{
+const raylibToZigType = std.StaticStringMap([]const u8).initComptime(.{
     .{ "void", "void" },
     .{ "bool", "bool" },
     .{ "char", "u8" },
@@ -470,7 +477,7 @@ const raylibToZigType = std.ComptimeStringMap([]const u8, .{
     .{ "double", "f64" },
 });
 
-const fixedMapping = std.ComptimeStringMap([]const u8, .{
+const fixedMapping = std.StaticStringMap([]const u8).initComptime(.{
     .{ "void *", "*anyopaque" },
     .{ "const void *", "*const anyopaque" },
     .{ "const unsigned char *", "[*:0]const u8" },
@@ -484,7 +491,7 @@ const fixedMapping = std.ComptimeStringMap([]const u8, .{
 
 //--- Raylib parser JSONs -------------------------------------------------------------------------
 
-const alias = std.ComptimeStringMap([]const u8, .{
+const alias = std.StaticStringMap([]const u8).initComptime(.{
     .{ "Camera", "Camera3D" },
     .{ "Texture", "Texture2D" },
     .{ "TextureCubemap", "Texture2D" },
@@ -494,7 +501,7 @@ const alias = std.ComptimeStringMap([]const u8, .{
     .{ "PhysicsBody", "*PhysicsBodyData" },
 });
 
-const cAlias = std.ComptimeStringMap([]const u8, .{
+const cAlias = std.StaticStringMap([]const u8).initComptime(.{
     .{ "Camera", "Camera3D" },
     .{ "Texture", "Texture2D" },
     .{ "TextureCubemap", "Texture2D" },
@@ -651,7 +658,7 @@ pub const RaylibFunctionParam = struct {
 pub const RaylibDefine = struct {
     name: []const u8,
     type: []const u8,
-    value: []const u8,
+    value: std.json.Value,
     description: ?[]const u8 = null,
 };
 
@@ -660,7 +667,7 @@ pub const RaylibDefine = struct {
 /// true if C type is primitive or a pointer to anything
 /// this means we don't need to wrap it in a pointer
 pub fn isPrimitiveOrPointer(c: []const u8) bool {
-    const primitiveTypes = std.ComptimeStringMap(void, .{
+    const primitiveTypes = std.StaticStringMap(void).initComptime(.{
         .{ "void", {} },
         .{ "bool", {} },
         .{ "char", {} },
@@ -688,4 +695,9 @@ fn startsWith(haystack: []const u8, needle: []const u8) bool {
 
 fn endsWith(haystack: []const u8, needle: []const u8) bool {
     return std.mem.endsWith(u8, haystack, needle);
+}
+
+fn jsonStringify(allocator: Allocator, value: std.json.Value) ![]const u8 {
+    const jsonString = try json.stringifyAlloc(allocator, value, .{});
+    return std.mem.trim(u8, jsonString, "\"");
 }
